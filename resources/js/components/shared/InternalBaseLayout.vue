@@ -1,0 +1,24 @@
+<script setup lang="ts">
+import Sidebar from './Sidebar.vue';
+import TopMenuBar from './TopMenuBar.vue';
+
+defineProps<{
+    title: string;
+}>();
+</script>
+
+<template>
+    <div class="min-h-screen bg-slate-100 text-slate-900">
+        <div class="grid min-h-screen grid-cols-1 lg:grid-cols-[15.5rem_1fr]">
+            <Sidebar />
+
+            <div class="flex min-h-screen flex-col">
+                <TopMenuBar :title="title" />
+
+                <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
+                    <slot />
+                </main>
+            </div>
+        </div>
+    </div>
+</template>

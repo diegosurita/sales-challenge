@@ -33,4 +33,9 @@ class AuthenticationController extends Controller
 
         return redirect()->intended(route('dashboard'));
     }
+
+    public function logout(Request $request): void
+    {
+        // implement logout
+    }
 }

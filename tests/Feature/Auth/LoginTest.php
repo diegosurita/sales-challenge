@@ -9,7 +9,7 @@ use function Pest\Laravel\post;
 it('should authenticate a user with valid credentials and redirect to dashboard', function () {
     $user = User::factory()->create();
 
-    $response = post(route('login'), [
+    $response = post(route('auth.login'), [
         'email' => $user->email,
         'password' => 'password',
     ]);
@@ -21,7 +21,7 @@ it('should authenticate a user with valid credentials and redirect to dashboard'
 it('should redirect back with a failed error when credentials are invalid', function () {
     $user = User::factory()->create();
 
-    $response = from(route('home'))->post(route('login'), [
+    $response = from(route('home'))->post(route('auth.login'), [
         'email' => $user->email,
         'password' => 'invalid-password',
     ]);
