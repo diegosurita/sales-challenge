@@ -31,7 +31,7 @@ const resetFieldError = (field: string) => {
 
 <template>
     <section class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-        <form action="/login" method="post" class="mx-auto flex w-full max-w-md flex-col items-center gap-4"
+        <form action="/auth/login" method="post" class="mx-auto flex w-full max-w-md flex-col items-center gap-4"
             @submit.prevent="onSubmit">
             <div v-if="page.props.errors?.failed" class="w-full text-red-500 text-sm bg-red-50 p-2 rounded mb-4">{{
                 page.props.errors.failed }}</div>
