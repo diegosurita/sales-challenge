@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Module\Auth\Core\Contracts\UserAuthenticationServiceContract;
+use Module\Auth\Infrastructure\Security\LaravelUserAuthenticationService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,7 +17,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(
+            UserAuthenticationServiceContract::class,
+            LaravelUserAuthenticationService::class,
+        );
     }
 
     /**
