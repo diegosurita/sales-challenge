@@ -13,5 +13,6 @@ Route::get('/login', function () {
 
 Route::middleware('auth')->group(function () {
     Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
+    Route::inertia('/clients', 'ClientsList')->name('clients');
     Route::post('/auth/logout', [AuthenticationController::class, 'logout'])->name('logout');
 });
