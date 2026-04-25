@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/vue3';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import type { ColDef, GridOptions } from 'ag-grid-community';
 import { AgGridVue } from 'ag-grid-vue3';
-import ClientActions from '@/components/ClientActions.vue';
+import ClientActions from '@/components/client/ClientActions.vue';
 import InternalBaseLayout from '@/components/shared/InternalBaseLayout.vue';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
