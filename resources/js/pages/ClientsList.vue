@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/vue3';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import type { ColDef, GridOptions } from 'ag-grid-community';
 import { AgGridVue } from 'ag-grid-vue3';
+import ClientActions from '@/components/ClientActions.vue';
 import InternalBaseLayout from '@/components/shared/InternalBaseLayout.vue';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -18,12 +19,20 @@ const props = defineProps<{
 
 const columnDefs: ColDef<Client>[] = [
     { field: 'name', headerName: 'Name', sortable: true, filter: true, flex: 1 },
+    { headerName: 'Actions', cellRenderer: ClientActions, width: 100, sortable: false, filter: false },
 ];
 
 const rowData = props.clients;
 
 const gridOptions: GridOptions = {
     domLayout: 'autoHeight',
+    context: {
+        onDelete: (id: number) => {
+            // Placeholder for delete action
+            console.log('Delete client', id);
+            alert(`Delete client ${id}?`);
+        },
+    },
 };
 </script>
 
