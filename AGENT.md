@@ -1,8 +1,8 @@
 # General Guidelines
 
-- All commands should be executed in the docker compose service `larave.test`.
+- All commands (JavaScript or PHP) should be executed in the docker compose service `larave.test`.
 
-# Architecture and Code Style Guidelines
+# Backend Architecture and Code Style Guidelines
 
 ## Modular Design
 
@@ -57,3 +57,14 @@ Follow the principles of Clean Architecture, including the guidelines bellow.
 - `Contracts`: This folder should contain the interfaces that define the contracts for the implementations outside the Application and Enterprise layers, following Clean Architecture principles.
 - `Exceptions`: This folder should contain code related to custom exceptions that can be thrown by the classes in the Application and Enterprise layers.
 - `DTOs`: This folder should contain Data Transfer Objects, which are used to transfer data between layers and modules.
+
+# Frontend Architecture and Code Style Guidelines
+
+- The frontend is following Laravel's default architecture.
+
+## Components Organization Guidelines
+
+- Reusable components should be placed in the `resources/js/components` folder following the modular design principles.
+- Each module should have its own folder inside `resources/js/components` where the components related to that module should be placed. For example, components related to the Client module should be placed in `resources/js/components/client`.
+- Components that are shared between modules should be placed in `resources/js/components/shared`.
+- Pages should be placed in the `resources/js/pages` folder, following the modular design principles. Each page should be organized in a separate file, and if necessary, a folder with related components can be created inside the `resources/js/components` folder.
