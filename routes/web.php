@@ -16,6 +16,7 @@ Route::middleware('auth')->group(function () {
     Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
     Route::resource('/clients', ClientController::class)->names([
         'index' => 'clients.index',
+        'create' => 'clients.create',
     ]);
     Route::post('/auth/logout', [AuthenticationController::class, 'logout'])->name('logout');
 });

@@ -16,4 +16,9 @@ class ClientController extends Controller
             'clients' => array_map(fn ($client) => $client->toArray(), $clients),
         ]);
     }
+
+    public function create()
+    {
+        return Inertia::render('ClientForm');
+    }
 }
