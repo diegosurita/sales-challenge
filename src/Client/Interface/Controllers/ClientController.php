@@ -15,14 +15,14 @@ class ClientController extends Controller
     {
         $clients = $useCase->execute();
 
-        return Inertia::render('ClientsList', [
+        return Inertia::render('Client/ClientsList', [
             'clients' => array_map(fn ($client) => $client->toArray(), $clients),
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('ClientForm');
+        return Inertia::render('Client/ClientForm');
     }
 
     public function store(Request $request, CreateClientUseCase $useCase)
