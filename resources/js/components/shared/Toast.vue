@@ -4,7 +4,7 @@
         <ToastIcon :type="type" />
         <div>{{ message }}</div>
         <button @click="close"
-            class="ml-auto -mx-1.5 -my-1.5 bg-transparent text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-transparent dark:hover:bg-gray-700"
+            class="ml-auto -mx-1.5 -my-1.5 bg-transparent text-gray-400 hover:text-gray-900 rounded-lg p-1.5 inline-flex h-8 w-8 items-center hover:cursor-pointer"
             aria-label="Close">
             <span class="sr-only">Close</span>
             <CloseIcon />
