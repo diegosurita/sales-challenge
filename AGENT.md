@@ -4,6 +4,12 @@
 
 # Backend Architecture and Code Style Guidelines
 
+## PHP
+
+- All PHP code should follow strictly the PSR-12 coding standard. Use Context7 tool for docs and code style checks.
+- All params and return types should be type hinted.
+- When using a method or function with more than 2 params, always use named parameters.
+
 ## Modular Design
 
 - The application is following the modular monolith architecture.
@@ -68,3 +74,9 @@ Follow the principles of Clean Architecture, including the guidelines bellow.
 - Each module should have its own folder inside `resources/js/components` where the components related to that module should be placed. For example, components related to the Client module should be placed in `resources/js/components/client`.
 - Components that are shared between modules should be placed in `resources/js/components/shared`.
 - Pages should be placed in the `resources/js/pages` folder, following the modular design principles. Each page should be organized in a separate file, and if necessary, a folder with related components can be created inside the `resources/js/components` folder.
+- Tests for frontend components should be placed in the same folder as the component they are testing, with the same name as the component file but with a `.spec.ts` extension. For example, tests for `resources/js/components/client/ClientList.vue` should be placed in `resources/js/components/client/ClientList.spec.ts`.
+- SVG icons should be placed in the `resources/js/icons` folder. Each icon should be organized in a separate file, and if necessary, a folder with related icons can be created inside the `resources/js/icons` folder.
+
+## Code Style Guidelines
+
+- Always use the linter and formatter configured in the project after making changes to Vue and TypeScript files.
