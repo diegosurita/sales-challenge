@@ -1,3 +1,7 @@
+# General Guidelines
+
+- All commands should be executed in the docker compose service `larave.test`.
+
 # Architecture and Code Style Guidelines
 
 ## Modular Design
@@ -6,6 +10,7 @@
 - Each module should be organized in a separate folder under `src/`.
 - Communication between modules should be done via a contract in the `src/Shared/Core/Contracts` folder. This contract should be an interface that defines the methods that the module exposes to other modules via a well-defined API. 
 - Modules that need to consume the API of another module should implement the contract defined in the `src/Shared/Core/Contracts` folder. This way, we can ensure that the modules are decoupled and can be easily replaced or modified without affecting other modules.
+- Backend tests in `tests/` should be organized in a similar way to the `src/` folder, with a separate folder for each module.
 
 ## Clean Architecture Principles
 
