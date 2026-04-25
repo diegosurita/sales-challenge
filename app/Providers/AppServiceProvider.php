@@ -9,6 +9,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Module\Auth\Core\Contracts\UserAuthenticationServiceContract;
 use Module\Auth\Infrastructure\Security\LaravelUserAuthenticationService;
+use Module\Client\Core\Contracts\ClientRepositoryContract;
+use Module\Client\Infrastructure\Persistence\Eloquent\Repositories\EloquentClientRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             UserAuthenticationServiceContract::class,
             LaravelUserAuthenticationService::class,
+        );
+
+        $this->app->bind(
+            ClientRepositoryContract::class,
+            EloquentClientRepository::class,
         );
     }
 
