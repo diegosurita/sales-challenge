@@ -2,8 +2,8 @@
 
 namespace Module\Client\Core\Contracts;
 
+use Module\Client\Core\DTOs\ClientFormDTO;
 use Module\Client\Core\Entities\ClientEntity;
-use Module\Client\Core\DTOs\NewUserDTO;
 
 interface ClientRepositoryContract
 {
@@ -12,5 +12,9 @@ interface ClientRepositoryContract
      */
     public function getAll(): array;
 
-    public function createUser(NewUserDTO $dto): void;
+    public function createUser(ClientFormDTO $dto): void;
+
+    public function getByID(int $id): ClientEntity;
+
+    public function updateClient(ClientFormDTO $dto): void;
 }

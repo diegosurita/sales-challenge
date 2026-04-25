@@ -5,6 +5,7 @@ import type { ColDef, GridOptions } from 'ag-grid-community';
 import { AgGridVue } from 'ag-grid-vue3';
 import ClientActions from '@/components/client/ClientActions.vue';
 import InternalBaseLayout from '@/components/shared/InternalBaseLayout.vue';
+import Toast from '@/components/shared/Toast.vue';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -15,6 +16,7 @@ interface Client {
 
 const props = defineProps<{
     clients: Client[];
+    successMessage?: string;
 }>();
 
 const columnDefs: ColDef<Client>[] = [
@@ -45,6 +47,8 @@ const gridOptions: GridOptions = {
                 New
             </a>
         </div>
+
+        <Toast :message="successMessage" type="success" />
 
         <AgGridVue
             :columnDefs="columnDefs"

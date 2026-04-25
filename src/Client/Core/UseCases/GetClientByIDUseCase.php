@@ -5,17 +5,15 @@ namespace Module\Client\Core\UseCases;
 use Module\Client\Core\Contracts\ClientRepositoryContract;
 use Module\Client\Core\Entities\ClientEntity;
 
-class GetClientsUseCase
+class GetClientByIDUseCase
 {
     public function __construct(
         private readonly ClientRepositoryContract $clientRepository,
-    ) {}
+    ) {
+    }
 
-    /**
-     * @return ClientEntity[]
-     */
-    public function execute(): array
+    public function execute(int $clientId): ClientEntity
     {
-        return $this->clientRepository->getAll();
+        return $this->clientRepository->getByID($clientId);
     }
 }

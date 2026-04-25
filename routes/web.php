@@ -1,8 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use Module\Auth\Interface\Controllers\AuthenticationController;
 use Module\Client\Interface\Controllers\ClientController;
-use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'auth/Login')->name('home');
 Route::post('/auth/login', [AuthenticationController::class, 'login'])->name('auth.login');
@@ -17,6 +17,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/clients', ClientController::class)->names([
         'index' => 'clients.index',
         'create' => 'clients.create',
+        'update' => 'clients.update',
     ]);
     Route::post('/auth/logout', [AuthenticationController::class, 'logout'])->name('logout');
 });

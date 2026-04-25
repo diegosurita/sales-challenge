@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import { Head, router, usePage } from '@inertiajs/vue3';
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
 import InternalBaseLayout from '@/components/shared/InternalBaseLayout.vue';
+
+interface Props {
+    client?: { id: number; name: string };
+}
+
+const props = defineProps<Props>();
 
 const page = usePage();
 
+const isEditMode = computed(() => !!props.client);
+
 const form = reactive({
-    name: '',
+    name: props.client?.name || '',
 });
 
 const onSubmit = (event: SubmitEvent) => {
@@ -30,10 +38,10 @@ const resetFieldError = (field: string) => {
 
 
 <template>
-    <Head title="Create Client" />
+    <Head :title="isEditMode ? 'Edit Client' : 'Create Client'" />
 
-    <InternalBaseLayout title="Create Client">
-        <form action="/clients" method="post" class="max-w-md space-y-4" @submit.prevent="onSubmit">
+    <InternalBaseLayout :title="isEditMode ? 'Edit Client' : 'Create Client'">
+        <form :action="isEditMode ? `/clients/${props.client!.id}` : '/clients'" method="post" class="max-w-md space-y-4" @submit.prevent="onSubmit">
             <div>
                 <label for="name" class="block text-sm font-medium text-slate-700">
                     Name
@@ -51,6 +59,8 @@ const resetFieldError = (field: string) => {
                 <p v-if="page.props.errors?.name" class="text-red-500 text-sm mt-1">{{ page.props.errors.name }}</p>
             </div>
 
+            <input v-if="isEditMode" type="hidden" name="_method" value="PUT" />
+
             <hr class="border-slate-200 my-4" />
 
             <div class="flex space-x-3">
@@ -63,7 +73,7 @@ const resetFieldError = (field: string) => {
                 </button>
                 <button
                     type="submit"
-                    class="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 hover:bg-sky-700 hover:cursor-pointer"
+                    class="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white bg-sky-600 hover:bg-sky-700 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 hover:cursor-pointer"
                 >
                     Save
                 </button>
