@@ -1,0 +1,1 @@
+For agent instructions, refer to the `../AGENT.md` file.

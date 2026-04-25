@@ -1,0 +1,54 @@
+# Architecture and Code Style Guidelines
+
+## Modular Design
+
+- The application is following the modular monolith architecture.
+- Each module should be organized in a separate folder under `src/`.
+- Communication between modules should be done via a contract in the `src/Shared/Core/Contracts` folder. This contract should be an interface that defines the methods that the module exposes to other modules via a well-defined API. 
+- Modules that need to consume the API of another module should implement the contract defined in the `src/Shared/Core/Contracts` folder. This way, we can ensure that the modules are decoupled and can be easily replaced or modified without affecting other modules.
+
+## Clean Architecture Principles
+
+Follow the principles of Clean Architecture, including the guidelines bellow.
+
+### Frameworks and Drivers Layer
+
+**General Guidelines:**
+
+- Files related to this layer should be placed in folder `src/{Module}/Infrastructure`.
+- This layer should contain code related to frameworks, databases, external services and modules communication.
+
+**Folder Structure:**
+
+- `Persistence`: This folder should contain code related to database interactions, such as repositories, models and migrations.
+- `Security`: This folder should contain code related to authentication and authorization, such as guards, policies and permissions.
+- `Gateways`: This folder should contain code related to communication with external services, such as API clients, message brokers and module communication.
+
+### Interface Adapters Layer
+
+**General Guidelines:**
+
+- Files related to this layer should be placed in folder `src/{Module}/Interface`.
+- This layer should contain code related to controllers, presenters, views and other interface adapters.
+
+**Folder Structure:**
+
+- `Controllers`: This folder should contain code related to handling HTTP requests and responses.
+- `APIs`: This folder should contain code related to API for other modules communication.
+
+### Application & Enterprise Layer
+
+**General Guidelines:**
+
+- Files related to this layer should be placed in folder `src/{Module}/Core`.
+- This layer should contain code related to the application's business logic and domain entities.
+- This layer should not have any dependencies on the Frameworks and Drivers Layer or the Interface Adapters Layer.
+- Use case classes should always have a method `execute` that will be called by the controllers to execute the use case. This method can return a value or not, depending on the use case.
+
+**Folder Structure:**
+
+- `UseCases`: This folder should contain code related to the application's use cases, which are the specific actions that the application can perform.
+- `Entities`: This folder should contain code related to the application's domain entities, which are the core business objects that the application manipulates.
+- `Contracts`: This folder should contain the interfaces that define the contracts for the implementations outside the Application and Enterprise layers, following Clean Architecture principles.
+- `Exceptions`: This folder should contain code related to custom exceptions that can be thrown by the classes in the Application and Enterprise layers.
+- `DTOs`: This folder should contain Data Transfer Objects, which are used to transfer data between layers and modules.
