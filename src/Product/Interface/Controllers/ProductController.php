@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         $products = $useCase->execute();
 
-        return Inertia::render('product/ProductsList', [
+        return Inertia::render('Product/ProductsList', [
             'products' => array_map(fn ($product) => $product->toArray(), $products),
             'successMessage' => session('success'),
         ]);
@@ -27,7 +27,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        return Inertia::render('product/ProductForm');
+        return Inertia::render('Product/ProductForm');
     }
 
     public function edit(int $id, GetProductByIDUseCase $useCase)
@@ -35,7 +35,7 @@ class ProductController extends Controller
         try {
             $product = $useCase->execute($id);
 
-            return Inertia::render('product/ProductForm', [
+            return Inertia::render('Product/ProductForm', [
                 'product' => $product->toArray(),
             ]);
         } catch (NotFoundException $e) {

@@ -11,7 +11,7 @@ it('should render edit form with product data', function () {
     $response = actingAs($user)->get(route('products.edit', $product->id));
 
     $response->assertInertia(fn ($page) => $page
-        ->component('product/ProductForm')
+        ->component('Product/ProductForm')
         ->has('product')
         ->where('product.id', $product->id)
         ->where('product.name', 'Existing Product')

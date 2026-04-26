@@ -12,7 +12,7 @@ it('should return a list of products for authenticated user', function () {
     $response = actingAs($user)->get(route('products.index'));
 
     $response->assertInertia(fn ($page) => $page
-        ->component('product/ProductsList')
+        ->component('Product/ProductsList')
         ->has('products', 3)
         ->where('products.0.name', $products[0]->name)
         ->where('products.1.name', $products[1]->name)
