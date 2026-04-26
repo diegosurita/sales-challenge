@@ -183,9 +183,6 @@ const submit = () => {
                         </ComboboxOptions>
                     </Combobox>
                 </div>
-                <p v-if="form.errors.client_id" class="mt-1 text-sm text-red-500">
-                    {{ form.errors.client_id }}
-                </p>
             </div>
 
             <!-- Products -->
@@ -240,10 +237,6 @@ const submit = () => {
                         Add
                     </button>
                 </div>
-
-                <p v-if="form.errors.products" class="mt-1 text-sm text-red-500">
-                    {{ form.errors.products }}
-                </p>
 
                 <div v-if="addedProducts.length > 0" class="mt-3 overflow-hidden rounded-lg border border-slate-200">
                     <table class="w-full text-sm">
@@ -329,10 +322,6 @@ const submit = () => {
                     </button>
                 </div>
 
-                <p v-if="form.errors.services" class="mt-1 text-sm text-red-500">
-                    {{ form.errors.services }}
-                </p>
-
                 <div v-if="addedServices.length > 0" class="mt-3 overflow-hidden rounded-lg border border-slate-200">
                     <table class="w-full text-sm">
                         <thead class="bg-slate-50">
@@ -364,11 +353,6 @@ const submit = () => {
                 </div>
             </div>
 
-            <!-- Items error (no product or service) -->
-            <p v-if="(form.errors as Record<string, string>).items" class="text-sm text-red-500">
-                {{ (form.errors as Record<string, string>).items }}
-            </p>
-
             <!-- Sale Summary -->
             <div
                 v-if="addedProducts.length > 0 || addedServices.length > 0"
@@ -389,6 +373,19 @@ const submit = () => {
                         <span>{{ formatCurrency(total) }}</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- Validation Errors -->
+            <div
+                v-if="form.errors.client_id || form.errors.products || form.errors.services || (form.errors as Record<string, string>).items"
+                class="rounded-lg border border-red-200 bg-red-50 p-4"
+            >
+                <ul class="space-y-1 text-sm text-red-600">
+                    <li v-if="form.errors.client_id">{{ form.errors.client_id }}</li>
+                    <li v-if="form.errors.products">{{ form.errors.products }}</li>
+                    <li v-if="form.errors.services">{{ form.errors.services }}</li>
+                    <li v-if="(form.errors as Record<string, string>).items">{{ (form.errors as Record<string, string>).items }}</li>
+                </ul>
             </div>
 
             <hr class="border-slate-200" />
