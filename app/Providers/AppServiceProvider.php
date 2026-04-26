@@ -11,6 +11,8 @@ use Module\Auth\Core\Contracts\UserAuthenticationServiceContract;
 use Module\Auth\Infrastructure\Security\LaravelUserAuthenticationService;
 use Module\Client\Core\Contracts\ClientRepositoryContract;
 use Module\Client\Infrastructure\Persistence\Eloquent\Repositories\EloquentClientRepository;
+use Module\Product\Core\Contracts\ProductRepositoryContract;
+use Module\Product\Infrastructure\Persistence\Eloquent\Repositories\EloquentProductRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             ClientRepositoryContract::class,
             EloquentClientRepository::class,
+        );
+
+        $this->app->bind(
+            ProductRepositoryContract::class,
+            EloquentProductRepository::class,
         );
     }
 
