@@ -12,7 +12,9 @@ use Module\Auth\Infrastructure\Security\LaravelUserAuthenticationService;
 use Module\Client\Core\Contracts\ClientRepositoryContract;
 use Module\Client\Infrastructure\Persistence\Eloquent\Repositories\EloquentClientRepository;
 use Module\Product\Core\Contracts\ProductRepositoryContract;
+use Module\Product\Core\Contracts\ProductStockLedgerRepositoryContract;
 use Module\Product\Infrastructure\Persistence\Eloquent\Repositories\EloquentProductRepository;
+use Module\Product\Infrastructure\Persistence\Eloquent\Repositories\EloquentProductStockLedgerRepository;
 use Module\Sale\Core\Contracts\SaleRepositoryContract;
 use Module\Sale\Infrastructure\Persistence\Eloquent\Repositories\EloquentSaleRepository;
 use Module\Service\Core\Contracts\ServiceRepositoryContract;
@@ -38,6 +40,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             ProductRepositoryContract::class,
             EloquentProductRepository::class,
+        );
+
+        $this->app->bind(
+            ProductStockLedgerRepositoryContract::class,
+            EloquentProductStockLedgerRepository::class,
         );
 
         $this->app->bind(

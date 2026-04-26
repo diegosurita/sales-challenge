@@ -8,6 +8,7 @@ final class ProductEntity
         private readonly int $id,
         private readonly string $name,
         private readonly float $price,
+        private ?int $stockCount = null,
     ) {
     }
 
@@ -26,12 +27,24 @@ final class ProductEntity
         return $this->price;
     }
 
+    public function getStockCount(): ?int
+    {
+        return $this->stockCount;
+    }
+
+    public function setCount(int $count): self
+    {
+        $this->stockCount = $count;
+        return $this;
+    }
+
     public function toArray(): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
             'price' => $this->price,
+            'stock_count' => $this->stockCount,
         ];
     }
 }

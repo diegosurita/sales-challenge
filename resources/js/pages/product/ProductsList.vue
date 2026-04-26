@@ -16,6 +16,7 @@ interface Product {
     id: number;
     name: string;
     price: number;
+    stock_count: number;
 }
 
 const props = defineProps<{
@@ -35,6 +36,16 @@ const columnDefs: ColDef<Product>[] = [
             const price = Number(params.value ?? 0);
 
             return `$${price.toFixed(2)}`;
+        },
+    },
+    {
+        field: 'stock_count',
+        headerName: 'Stock',
+        sortable: true,
+        filter: true,
+        width: 140,
+        valueFormatter: (params: ValueFormatterParams<Product, number>) => {
+            return String(params.value ?? 0);
         },
     },
     { headerName: 'Actions', cellRenderer: ProductActions, width: 100, sortable: false, filter: false },

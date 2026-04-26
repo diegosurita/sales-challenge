@@ -25,6 +25,7 @@ class ProductFactory extends Factory
         return [
             'name' => fake()->words(asText: true, nb: 2),
             'price' => fake()->randomFloat(nbMaxDecimals: 2, min: 1, max: 10000),
+            'stock_count' => fake()->numberBetween(0, 500),
         ];
     }
 }

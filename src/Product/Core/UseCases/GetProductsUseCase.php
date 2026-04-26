@@ -9,6 +9,7 @@ class GetProductsUseCase
 {
     public function __construct(
         private readonly ProductRepositoryContract $productRepository,
+        private readonly GetProductsStockFromLedgerUseCase $getProductsStockFromLedgerUseCase,
     ) {
     }
 
@@ -17,6 +18,32 @@ class GetProductsUseCase
      */
     public function execute(): array
     {
-        return $this->productRepository->getAll();
+        $products = $this->productRepository->getAll();
+
+        $productsWithoutStockCount = array_filter(
+            $products,
+            fn (ProductEntity $product): bool => $product->getStockCount() === null,
+        );
+
+        if ($productsWithoutStockCount === []) {
+            return $products;
+        }
+
+        $productIDsWithoutStockCount = array_map(
+            fn (ProductEntity $product): int => $product->getId(),
+            $productsWithoutStockCount,
+        );
+
+        $ledgerStockByProductID = $this->getProductsStockFromLedgerUseCase->execute($productIDsWithoutStockCount);
+
+        return array_map(function (ProductEntity $product) use ($ledgerStockByProductID): ProductEntity {
+            if ($product->getStockCount() !== null) {
+                return $product;
+            }
+
+            $stockCount = $ledgerStockByProductID[$product->getId()] ?? 0;
+
+            return $product->setCount($stockCount);
+        }, $products);
     }
 }
