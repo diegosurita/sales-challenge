@@ -31,6 +31,13 @@
                 Products
             </a>
             <a
+                href="/sales"
+                :class="currentPath === '/sales' ? 'flex items-center rounded-lg bg-slate-800 px-3 py-2 text-sm font-medium text-white' : 'flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white'"
+            >
+                <i class="pi pi-shopping-cart mr-2"></i>
+                Sales
+            </a>
+            <a
                 href="/services"
                 :class="currentPath === '/services' ? 'flex items-center rounded-lg bg-slate-800 px-3 py-2 text-sm font-medium text-white' : 'flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white'"
             >
