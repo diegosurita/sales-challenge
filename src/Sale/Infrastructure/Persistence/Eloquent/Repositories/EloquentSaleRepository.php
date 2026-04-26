@@ -11,11 +11,12 @@ class EloquentSaleRepository implements SaleRepositoryContract
     public function getAll(): array
     {
         return Sale::get()->map(fn (Sale $sale) => new SaleEntity(
-            $sale->id,
-            $sale->client_id,
-            $sale->client->name,
-            $sale->status,
-            $sale->timestamp,
+            id: $sale->id,
+            clientId: $sale->client_id,
+            clientName: $sale->client->name,
+            status: $sale->status,
+            createdAt: $sale->created_at->toImmutable(),
+            updatedAt: $sale->updated_at->toImmutable(),
         ))->toArray();
     }
 }

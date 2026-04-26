@@ -9,7 +9,8 @@ final class SaleEntity
         private readonly int $clientId,
         private readonly string $clientName,
         private readonly string $status,
-        private readonly string $timestamp,
+        private readonly \DateTimeImmutable $createdAt,
+        private readonly \DateTimeImmutable $updatedAt,
     ) {
     }
 
@@ -33,9 +34,14 @@ final class SaleEntity
         return $this->status;
     }
 
-    public function getTimestamp(): string
+    public function getCreatedAt(): \DateTimeImmutable
     {
-        return $this->timestamp;
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): \DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 
     public function toArray(): array
@@ -45,7 +51,8 @@ final class SaleEntity
             'client_id' => $this->clientId,
             'client_name' => $this->clientName,
             'status' => $this->status,
-            'timestamp' => $this->timestamp,
+            'created_at' => $this->createdAt->format(\DateTimeInterface::ATOM),
+            'updated_at' => $this->updatedAt->format(\DateTimeInterface::ATOM),
         ];
     }
 }

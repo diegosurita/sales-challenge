@@ -15,7 +15,7 @@ interface Sale {
     id: number;
     client_name: string;
     status: string;
-    timestamp: string;
+    created_at: string;
 }
 
 const props = defineProps<{
@@ -25,8 +25,51 @@ const props = defineProps<{
 
 const columnDefs: ColDef<Sale>[] = [
     { field: 'client_name', headerName: 'Client', sortable: true, filter: true, flex: 1 },
-    { field: 'status', headerName: 'Status', sortable: true, filter: true, flex: 1 },
-    { field: 'timestamp', headerName: 'Timestamp', sortable: true, filter: true, flex: 1 },
+    { field: 'status', headerName: 'Status', sortable: true, filter: false, flex: 1 },
+    {
+        field: 'created_at',
+        headerName: 'Created At',
+        sortable: true,
+        filter: 'agDateColumnFilter',
+        valueFormatter: ({ value }: { value: string }) => {
+            if (!value) {
+                return '';
+            }
+
+            const d = new Date(value);
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            const HH = String(d.getHours()).padStart(2, '0');
+            const ii = String(d.getMinutes()).padStart(2, '0');
+            const ss = String(d.getSeconds()).padStart(2, '0');
+
+            return `${mm}/${dd}/${yyyy} ${HH}:${ii}:${ss}`;
+        },
+        filterParams: {
+            filterOptions: ['inRange'],
+            defaultOption: 'inRange',
+            inRangeInclusive: true,
+            comparator: (filterDate: Date, cellValue: string) => {
+                if (!cellValue) {
+                    return 0;
+                }
+
+                const cellDate = new Date(cellValue);
+
+                if (cellDate < filterDate) {
+                    return -1;
+                }
+
+                if (cellDate > filterDate) {
+                    return 1;
+                }
+
+                return 0;
+            },
+        },
+        flex: 1,
+    },
     { headerName: 'Actions', cellRenderer: SaleActions, width: 100, sortable: false, filter: false },
 ];
 
@@ -86,30 +129,23 @@ const gridOptions: GridOptions = {
 </script>
 
 <template>
+
     <Head title="Sales" />
 
     <InternalBaseLayout title="Sales">
         <div class="flex justify-end mb-4">
-            <a href="/sales/create" class="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 hover:cursor-pointer hover:bg-sky-700">
+            <a href="/sales/create"
+                class="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 hover:cursor-pointer hover:bg-sky-700">
                 New
             </a>
         </div>
 
         <Toast :message="toastMessage || successMessage" :type="toastType" />
 
-        <AgGridVue
-            :columnDefs="columnDefs"
-            :rowData="rowData"
-            :gridOptions="gridOptions"
-            class="ag-theme-alpine"
-        />
+        <AgGridVue :columnDefs="columnDefs" :rowData="rowData" :gridOptions="gridOptions" class="ag-theme-alpine" />
 
-        <ConfirmationModal
-            :is-open="isModalOpen"
-            title="Delete Sale"
-            message="Are you sure you want to delete this sale? This action cannot be undone."
-            @close="closeModal"
-            @confirm="confirmDelete"
-        />
+        <ConfirmationModal :is-open="isModalOpen" title="Delete Sale"
+            message="Are you sure you want to delete this sale? This action cannot be undone." @close="closeModal"
+            @confirm="confirmDelete" />
     </InternalBaseLayout>
 </template>
