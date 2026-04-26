@@ -13,6 +13,8 @@ use Module\Client\Core\Contracts\ClientRepositoryContract;
 use Module\Client\Infrastructure\Persistence\Eloquent\Repositories\EloquentClientRepository;
 use Module\Product\Core\Contracts\ProductRepositoryContract;
 use Module\Product\Infrastructure\Persistence\Eloquent\Repositories\EloquentProductRepository;
+use Module\Service\Core\Contracts\ServiceRepositoryContract;
+use Module\Service\Infrastructure\Persistence\Eloquent\Repositories\EloquentServiceRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             ProductRepositoryContract::class,
             EloquentProductRepository::class,
+        );
+
+        $this->app->bind(
+            ServiceRepositoryContract::class,
+            EloquentServiceRepository::class,
         );
     }
 

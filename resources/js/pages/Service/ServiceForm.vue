@@ -4,18 +4,18 @@ import { computed, reactive } from 'vue';
 import InternalBaseLayout from '@/components/Shared/InternalBaseLayout.vue';
 
 interface Props {
-    product?: { id: number; name: string; price: number };
+    service?: { id: number; name: string; price: number };
 }
 
 const props = defineProps<Props>();
 
 const page = usePage();
 
-const isEditMode = computed(() => !!props.product);
+const isEditMode = computed(() => !!props.service);
 
 const form = reactive({
-    name: props.product?.name || '',
-    price: props.product?.price?.toString() || '',
+    name: props.service?.name || '',
+    price: props.service?.price?.toString() || '',
 });
 
 const onSubmit = (event: SubmitEvent) => {
@@ -38,11 +38,11 @@ const resetFieldError = (field: string) => {
 </script>
 
 <template>
-    <Head :title="isEditMode ? 'Edit Product' : 'Create Product'" />
+    <Head :title="isEditMode ? 'Edit Service' : 'Create Service'" />
 
-    <InternalBaseLayout :title="isEditMode ? 'Edit Product' : 'Create Product'">
+    <InternalBaseLayout :title="isEditMode ? 'Edit Service' : 'Create Service'">
         <form
-            :action="isEditMode ? `/products/${props.product!.id}` : '/products'"
+            :action="isEditMode ? `/services/${props.service!.id}` : '/services'"
             method="post"
             class="max-w-md space-y-4"
             @submit.prevent="onSubmit"
@@ -57,7 +57,7 @@ const resetFieldError = (field: string) => {
                     type="text"
                     name="name"
                     class="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                    placeholder="Product name"
+                    placeholder="Service name"
                     @input="resetFieldError('name')"
                     required
                 />
@@ -90,7 +90,7 @@ const resetFieldError = (field: string) => {
             <div class="flex space-x-3">
                 <button
                     type="button"
-                    @click="router.visit('/products')"
+                    @click="router.visit('/services')"
                     class="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:cursor-pointer hover:bg-slate-50 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
                 >
                     Cancel

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, router, usePage } from '@inertiajs/vue3';
 import { reactive, computed } from 'vue';
-import InternalBaseLayout from '@/components/shared/InternalBaseLayout.vue';
+import InternalBaseLayout from '@/components/Shared/InternalBaseLayout.vue';
 
 interface Props {
     client?: { id: number; name: string };

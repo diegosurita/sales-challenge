@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Module\Auth\Infrastructure\Persistence\Eloquent\Models\User;
 use Illuminate\Database\Seeder;
+use Module\Auth\Infrastructure\Persistence\Eloquent\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(ClientSeeder::class);
         $this->call(ProductSeeder::class);
+        $this->call(ServiceSeeder::class);
     }
 }

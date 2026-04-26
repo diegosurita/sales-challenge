@@ -5,10 +5,10 @@ import type { ColDef, GridOptions } from 'ag-grid-community';
 import { AgGridVue } from 'ag-grid-vue3';
 import { ref } from 'vue';
 import { destroy } from '@/actions/Module/Client/Interface/Controllers/ClientController';
-import ClientActions from '@/components/client/ClientActions.vue';
-import ConfirmationModal from '@/components/shared/ConfirmationModal.vue';
-import InternalBaseLayout from '@/components/shared/InternalBaseLayout.vue';
-import Toast from '@/components/shared/Toast.vue';
+import ClientActions from '@/components/Client/ClientActions.vue';
+import ConfirmationModal from '@/components/Shared/ConfirmationModal.vue';
+import InternalBaseLayout from '@/components/Shared/InternalBaseLayout.vue';
+import Toast from '@/components/Shared/Toast.vue';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
