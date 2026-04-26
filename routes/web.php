@@ -14,10 +14,6 @@ Route::get('/login', function () {
 
 Route::middleware('auth')->group(function () {
     Route::inertia('/dashboard', 'auth/Dashboard')->name('dashboard');
-    Route::resource('/clients', ClientController::class)->names([
-        'index' => 'clients.index',
-        'create' => 'clients.create',
-        'update' => 'clients.update',
-    ]);
+    Route::resource('/clients', ClientController::class)->except(['show']);
     Route::post('/auth/logout', [AuthenticationController::class, 'logout'])->name('logout');
 });

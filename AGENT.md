@@ -73,6 +73,7 @@ Follow the principles of Clean Architecture, including the guidelines bellow.
 # Frontend Architecture and Code Style Guidelines
 
 - The frontend is following Laravel's default architecture.
+- Always use NPM for managing frontend dependencies and scripts.
 
 ## Components Organization Guidelines
 

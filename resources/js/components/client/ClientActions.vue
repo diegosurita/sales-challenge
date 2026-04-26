@@ -26,7 +26,7 @@ const handleDelete = () => {
     </a>
     <button
       @click="handleDelete"
-      class="inline-flex items-center justify-center rounded p-1 text-red-600 hover:bg-red-100 hover:text-red-900 focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+      class="inline-flex items-center justify-center rounded p-1 text-red-600 hover:bg-red-100 hover:text-red-900 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 hover:cursor-pointer"
       title="Delete"
     >
       <DeleteIcon />

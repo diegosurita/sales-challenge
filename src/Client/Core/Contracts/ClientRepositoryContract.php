@@ -17,4 +17,6 @@ interface ClientRepositoryContract
     public function getByID(int $id): ClientEntity;
 
     public function updateClient(ClientFormDTO $dto): void;
+
+    public function delete(int $id): void;
 }

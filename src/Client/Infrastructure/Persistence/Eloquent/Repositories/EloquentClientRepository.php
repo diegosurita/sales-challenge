@@ -51,4 +51,15 @@ class EloquentClientRepository implements ClientRepositoryContract
             'name' => $dto->name,
         ]);
     }
+
+    public function delete(int $id): void
+    {
+        $client = Client::find($id);
+
+        if (!$client) {
+            throw new NotFoundException('Client', $id);
+        }
+
+        $client->delete();
+    }
 }

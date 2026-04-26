@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Module\Client\Core\DTOs\ClientFormDTO;
 use Module\Client\Core\UseCases\CreateClientUseCase;
+use Module\Client\Core\UseCases\DeleteClientUseCase;
 use Module\Client\Core\UseCases\GetClientByIDUseCase;
 use Module\Client\Core\UseCases\GetClientsUseCase;
 use Module\Client\Core\UseCases\UpdateClientUseCase;
@@ -70,5 +71,16 @@ class ClientController extends Controller
         session()->flash('success', 'Client updated successfully.');
 
         return redirect()->route('clients.index');
+    }
+
+    public function destroy(int $id, DeleteClientUseCase $useCase)
+    {
+        try {
+            $useCase->execute($id);
+
+            return response()->noContent();
+        } catch (NotFoundException $e) {
+            abort(404);
+        }
     }
 }
