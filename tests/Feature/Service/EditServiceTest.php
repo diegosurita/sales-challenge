@@ -14,9 +14,11 @@ it('should render edit form with service data', function () {
     $response->assertInertia(fn ($page) => $page
         ->component('Service/ServiceForm')
         ->has('service')
+        ->has('products')
         ->where('service.id', $service->id)
         ->where('service.name', 'Existing Service')
         ->where('service.price', (float) $service->price)
+        ->where('service.product', null)
     );
 });
 

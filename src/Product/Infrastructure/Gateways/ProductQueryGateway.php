@@ -4,6 +4,7 @@ namespace Module\Product\Infrastructure\Gateways;
 
 use Module\Product\Core\UseCases\GetProductByIDUseCase;
 use Module\Product\Core\UseCases\GetProductsByIDsUseCase;
+use Module\Product\Core\UseCases\GetProductsUseCase;
 use Module\Shared\Core\Contracts\ProductQueryServiceContract;
 use Module\Shared\Core\Exceptions\NotFoundException;
 
@@ -12,7 +13,19 @@ class ProductQueryGateway implements ProductQueryServiceContract
     public function __construct(
         private readonly GetProductByIDUseCase $getProductByIDUseCase,
         private readonly GetProductsByIDsUseCase $getProductsByIDsUseCase,
+        private readonly GetProductsUseCase $getProductsUseCase,
     ) {}
+
+    /**
+     * @return array<int, array{id: int, name: string}>
+     */
+    public function getProducts(): array
+    {
+        return array_values(array_map(
+            fn ($product) => ['id' => $product->getId(), 'name' => $product->getName()],
+            $this->getProductsUseCase->execute(),
+        ));
+    }
 
     /**
      * @return array{id: int, name: string, price: float, stock_count: int|null}|null

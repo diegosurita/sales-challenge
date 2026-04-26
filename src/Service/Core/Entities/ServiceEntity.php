@@ -9,6 +9,7 @@ final class ServiceEntity
         private readonly string $name,
         private readonly float $price,
         private readonly bool $available,
+        private readonly ?ProductEntity $product = null,
     ) {}
 
     public function getId(): int
@@ -31,6 +32,11 @@ final class ServiceEntity
         return $this->available;
     }
 
+    public function getProduct(): ?ProductEntity
+    {
+        return $this->product;
+    }
+
     public function toArray(): array
     {
         return [
@@ -38,6 +44,10 @@ final class ServiceEntity
             'name' => $this->name,
             'price' => $this->price,
             'available' => $this->available,
+            'product' => $this->product ? [
+                'id' => $this->product->getId(),
+                'name' => $this->product->getName(),
+            ] : null,
         ];
     }
 }

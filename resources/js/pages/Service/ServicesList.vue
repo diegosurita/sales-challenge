@@ -17,6 +17,7 @@ interface Service {
     name: string;
     price: number;
     available: boolean;
+    product: { id: number; name: string } | null;
 }
 
 const props = defineProps<{
@@ -49,6 +50,16 @@ const columnDefs: ColDef<Service>[] = [
         cellRenderer: null,
         valueFormatter: (params: ValueFormatterParams<Service, boolean>) => {
             return params.value ? 'Yes' : 'No';
+        },
+    },
+    {
+        field: 'product',
+        headerName: 'Dependent On',
+        sortable: true,
+        filter: true,
+        flex: 1,
+        valueFormatter: (params: ValueFormatterParams<Service, { id: number; name: string } | null>) => {
+            return params.value?.name ?? '—';
         },
     },
     { headerName: 'Actions', cellRenderer: ServiceActions, width: 100, sortable: false, filter: false },

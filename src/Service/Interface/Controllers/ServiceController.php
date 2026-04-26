@@ -11,6 +11,7 @@ use Module\Service\Core\UseCases\DeleteServiceUseCase;
 use Module\Service\Core\UseCases\GetServiceByIDUseCase;
 use Module\Service\Core\UseCases\GetServicesUseCase;
 use Module\Service\Core\UseCases\UpdateServiceUseCase;
+use Module\Shared\Core\Contracts\ProductQueryServiceContract;
 use Module\Shared\Core\Exceptions\NotFoundException;
 
 class ServiceController extends Controller
@@ -25,18 +26,21 @@ class ServiceController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(ProductQueryServiceContract $productQueryService)
     {
-        return Inertia::render('Service/ServiceForm');
+        return Inertia::render('Service/ServiceForm', [
+            'products' => $productQueryService->getProducts(),
+        ]);
     }
 
-    public function edit(int $id, GetServiceByIDUseCase $useCase)
+    public function edit(int $id, GetServiceByIDUseCase $useCase, ProductQueryServiceContract $productQueryService)
     {
         try {
             $service = $useCase->execute($id);
 
             return Inertia::render('Service/ServiceForm', [
                 'service' => $service->toArray(),
+                'products' => $productQueryService->getProducts(),
             ]);
         } catch (NotFoundException $e) {
             abort(404);
@@ -49,12 +53,14 @@ class ServiceController extends Controller
             'name' => 'required|string',
             'price' => 'required|numeric|min:0',
             'available' => 'boolean',
+            'product_id' => 'nullable|integer',
         ]);
 
         $dto = new ServiceFormDTO(
             name: $request->name,
             price: (float) $request->price,
             available: $request->boolean('available', true),
+            productId: $request->filled('product_id') ? (int) $request->product_id : null,
         );
 
         $useCase->execute($dto);
@@ -70,6 +76,7 @@ class ServiceController extends Controller
             'name' => 'required|string',
             'price' => 'required|numeric|min:0',
             'available' => 'boolean',
+            'product_id' => 'nullable|integer',
         ]);
 
         $dto = new ServiceFormDTO(
@@ -77,6 +84,7 @@ class ServiceController extends Controller
             price: (float) $request->price,
             available: $request->boolean('available', true),
             id: $id,
+            productId: $request->filled('product_id') ? (int) $request->product_id : null,
         );
 
         $useCase->execute($dto);

@@ -5,6 +5,11 @@ namespace Module\Shared\Core\Contracts;
 interface ProductQueryServiceContract
 {
     /**
+     * @return array<int, array{id: int, name: string}>
+     */
+    public function getProducts(): array;
+
+    /**
      * @return array{id: int, name: string, price: float, stock_count: int|null}|null
      */
     public function getProductInfo(int $productId): ?array;
