@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use Module\Sale\Infrastructure\Persistence\Eloquent\Models\Sale;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Module\Client\Infrastructure\Persistence\Eloquent\Models\Client;
+use Module\Sale\Infrastructure\Persistence\Eloquent\Models\Sale;
 
 /**
  * @extends Factory<Sale>
@@ -26,6 +26,6 @@ class SaleFactory extends Factory
         return [
             'client_id' => Client::factory(),
             'status' => fake()->randomElement(['pending', 'completed']),
-            'timestamp' => fake()->dateTimeThisYear(),];
+        ];
     }
 }

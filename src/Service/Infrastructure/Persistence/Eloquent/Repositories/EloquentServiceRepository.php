@@ -46,6 +46,24 @@ class EloquentServiceRepository implements ServiceRepositoryContract
         );
     }
 
+    /**
+     * @param  int[]  $ids
+     * @return array<int, ServiceEntity>
+     */
+    public function getManyByIDs(array $ids): array
+    {
+        return Service::whereIn('id', $ids)
+            ->get()
+            ->keyBy('id')
+            ->map(fn (Service $service) => new ServiceEntity(
+                id: $service->id,
+                name: $service->name,
+                price: (float) $service->price,
+                available: $service->available,
+            ))
+            ->toArray();
+    }
+
     public function updateService(ServiceFormDTO $dto): void
     {
         if ($dto->id === null) {

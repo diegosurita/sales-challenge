@@ -33,7 +33,7 @@ class EloquentProductRepository implements ProductRepositoryContract
     {
         $product = Product::find($id);
 
-        if (!$product) {
+        if (! $product) {
             throw new NotFoundException('Product', $id);
         }
 
@@ -45,6 +45,24 @@ class EloquentProductRepository implements ProductRepositoryContract
         );
     }
 
+    /**
+     * @param  int[]  $ids
+     * @return array<int, ProductEntity>
+     */
+    public function getManyByIDs(array $ids): array
+    {
+        return Product::whereIn('id', $ids)
+            ->get()
+            ->keyBy('id')
+            ->map(fn (Product $product) => new ProductEntity(
+                id: $product->id,
+                name: $product->name,
+                price: (float) $product->price,
+                stockCount: $product->stock_count !== null ? (int) $product->stock_count : null,
+            ))
+            ->toArray();
+    }
+
     public function updateProduct(ProductFormDTO $dto): void
     {
         if ($dto->id === null) {
@@ -53,7 +71,7 @@ class EloquentProductRepository implements ProductRepositoryContract
 
         $product = Product::find($dto->id);
 
-        if (!$product) {
+        if (! $product) {
             throw new NotFoundException('Product', $dto->id);
         }
 
@@ -67,7 +85,7 @@ class EloquentProductRepository implements ProductRepositoryContract
     {
         $product = Product::find($id);
 
-        if (!$product) {
+        if (! $product) {
             throw new NotFoundException('Product', $id);
         }
 

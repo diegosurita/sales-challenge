@@ -1,1 +1,1 @@
-For agent instructions, refer to the `../AGENT.md` file.
+Refer to the `../AGENTS.md` file for the architecture guidelines and folder structure for the project. The following instructions are based on those guidelines and should be applied to all files in the project.

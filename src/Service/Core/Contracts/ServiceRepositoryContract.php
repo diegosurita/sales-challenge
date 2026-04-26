@@ -16,6 +16,12 @@ interface ServiceRepositoryContract
 
     public function getByID(int $id): ServiceEntity;
 
+    /**
+     * @param  int[]  $ids
+     * @return array<int, ServiceEntity>
+     */
+    public function getManyByIDs(array $ids): array;
+
     public function updateService(ServiceFormDTO $dto): void;
 
     public function delete(int $id): void;

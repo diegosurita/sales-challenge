@@ -16,6 +16,12 @@ interface ProductRepositoryContract
 
     public function getByID(int $id): ProductEntity;
 
+    /**
+     * @param  int[]  $ids
+     * @return array<int, ProductEntity>
+     */
+    public function getManyByIDs(array $ids): array;
+
     public function updateProduct(ProductFormDTO $dto): void;
 
     public function delete(int $id): void;

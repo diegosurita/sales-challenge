@@ -1,6 +1,7 @@
 # General Guidelines
 
 - All commands (JavaScript or PHP) should be executed in the docker compose service `larave.test`.
+- When there is a need for documentation access, use the Context7 tool to check for documentation and code style guidelines.
 
 # Backend Architecture and Code Style Guidelines
 
@@ -8,7 +9,7 @@
 
 - All PHP code should follow strictly the PSR-12 coding standard. Use Context7 tool for docs and code style checks.
 - All params and return types should be type hinted.
-- When using a method or function with more than 2 params, always use named parameters.
+- When using a method or function with more than 1 params, always use named parameters for all the parameters.
 
 ## Modular Design
 
