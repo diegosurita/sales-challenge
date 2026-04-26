@@ -82,7 +82,6 @@ Follow the principles of Clean Architecture, including the guidelines bellow.
 - Components that are shared between modules should be placed in `resources/js/components/shared`.
 - Pages should be placed in the `resources/js/pages` folder, following the modular design principles. Each page should be organized in a separate file, and if necessary, a folder with related components can be created inside the `resources/js/components` folder.
 - Tests for frontend components should be placed in the same folder as the component they are testing, with the same name as the component file but with a `.spec.ts` extension. For example, tests for `resources/js/components/client/ClientList.vue` should be placed in `resources/js/components/client/ClientList.spec.ts`.
-- SVG icons should be placed in the `resources/js/icons` folder. Each icon should be organized in a separate file, and if necessary, a folder with related icons can be created inside the `resources/js/icons` folder.
 
 ## Code Style Guidelines
 
