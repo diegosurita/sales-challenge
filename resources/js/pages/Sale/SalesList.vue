@@ -14,7 +14,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 interface Sale {
     id: number;
     client_name: string;
-    status: string;
     created_at: string;
 }
 
@@ -25,7 +24,6 @@ const props = defineProps<{
 
 const columnDefs: ColDef<Sale>[] = [
     { field: 'client_name', headerName: 'Client', sortable: true, filter: true, flex: 1 },
-    { field: 'status', headerName: 'Status', sortable: true, filter: false, flex: 1 },
     {
         field: 'created_at',
         headerName: 'Created At',

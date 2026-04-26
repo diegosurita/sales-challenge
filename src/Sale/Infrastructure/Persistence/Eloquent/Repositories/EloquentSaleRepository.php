@@ -21,7 +21,6 @@ class EloquentSaleRepository implements SaleRepositoryContract
             id: $sale->id,
             clientId: $sale->client_id,
             clientName: $sale->client->name,
-            status: $sale->status,
             createdAt: $sale->created_at->toImmutable(),
             updatedAt: $sale->updated_at->toImmutable(),
         ))->toArray();
@@ -36,7 +35,6 @@ class EloquentSaleRepository implements SaleRepositoryContract
         DB::transaction(function () use ($clientId, $products, $services): void {
             $sale = Sale::create([
                 'client_id' => $clientId,
-                'status' => 'pending',
             ]);
 
             $now = now();

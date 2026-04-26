@@ -40,7 +40,6 @@ it('should create a sale with a product and redirect to index', function () {
     $sale = Sale::where('client_id', $client->id)->first();
 
     expect($sale)->not->toBeNull();
-    expect($sale->status)->toBe('pending');
     expect(SaleProduct::where('sale_id', $sale->id)->where('product_id', $product->id)->exists())->toBeTrue();
 
     $product->refresh();

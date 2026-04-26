@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Module\Client\Infrastructure\Persistence\Eloquent\Models\Client;
 
-#[Fillable(['client_id', 'status'])]
+#[Fillable(['client_id'])]
 class Sale extends Model
 {
     /** @use HasFactory<SaleFactory> */

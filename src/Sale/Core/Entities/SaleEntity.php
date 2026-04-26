@@ -8,7 +8,6 @@ final class SaleEntity
         private readonly int $id,
         private readonly int $clientId,
         private readonly string $clientName,
-        private readonly string $status,
         private readonly \DateTimeImmutable $createdAt,
         private readonly \DateTimeImmutable $updatedAt,
     ) {
@@ -29,11 +28,6 @@ final class SaleEntity
         return $this->clientName;
     }
 
-    public function getStatus(): string
-    {
-        return $this->status;
-    }
-
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
@@ -50,7 +44,6 @@ final class SaleEntity
             'id' => $this->id,
             'client_id' => $this->clientId,
             'client_name' => $this->clientName,
-            'status' => $this->status,
             'created_at' => $this->createdAt->format(\DateTimeInterface::ATOM),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::ATOM),
         ];

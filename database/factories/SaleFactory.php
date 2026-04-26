@@ -25,7 +25,6 @@ class SaleFactory extends Factory
     {
         return [
             'client_id' => Client::factory(),
-            'status' => fake()->randomElement(['pending', 'completed']),
         ];
     }
 }
