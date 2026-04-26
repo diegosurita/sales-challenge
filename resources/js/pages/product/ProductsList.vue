@@ -5,7 +5,7 @@ import type { ColDef, GridOptions, ValueFormatterParams } from 'ag-grid-communit
 import { AgGridVue } from 'ag-grid-vue3';
 import { ref } from 'vue';
 import { destroy } from '@/actions/Module/Product/Interface/Controllers/ProductController';
-import ProductActions from '@/components/product/ProductActions.vue';
+import ProductActions from '@/components/Product/ProductActions.vue';
 import ConfirmationModal from '@/components/shared/ConfirmationModal.vue';
 import InternalBaseLayout from '@/components/shared/InternalBaseLayout.vue';
 import Toast from '@/components/shared/Toast.vue';
