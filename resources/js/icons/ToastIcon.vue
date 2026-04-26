@@ -1,6 +1,6 @@
 <template>
-  <CheckIcon v-if="type === 'success'" :colorClass="iconClasses" :width="width" :height="height" />
-  <ErrorIcon v-else :colorClass="iconClasses" :width="width" :height="height" />
+  <CheckIcon v-if="type === 'success'" :colorClass="iconClasses" :width="props.width" :height="props.height" />
+  <ErrorIcon v-else :colorClass="iconClasses" :width="props.width" :height="props.height" />
   <span class="sr-only">{{ iconSr }}</span>
 </template>
 

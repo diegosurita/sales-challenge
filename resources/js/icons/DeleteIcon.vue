@@ -5,9 +5,9 @@
     viewBox="0 0 24 24"
     stroke-width="1.5"
     stroke="currentColor"
-    :class="colorClass"
-    :width="width"
-    :height="height"
+    :class="props.colorClass"
+    :width="props.width"
+    :height="props.height"
   >
     <path
       stroke-linecap="round"
