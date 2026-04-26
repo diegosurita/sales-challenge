@@ -35,6 +35,12 @@ Follow the principles of Clean Architecture, including the guidelines bellow.
 - `Security`: This folder should contain code related to authentication and authorization, such as guards, policies and permissions.
 - `Gateways`: This folder should contain code related to communication with external services, such as API clients, message brokers and module communication.
 
+**Eloquent Models Guidelines:**
+
+- This project uses Eloquent as the ORM, but Eloquent models should only be used in the Frameworks and Drivers Layer, more specifically in the `Persistence` folder.
+- Repositories should always use Eloquent models to interact with the database, but the rest of the application should not have any dependency on Eloquent models.
+- Repositories should return (when applicable), domain entities defined in the Application and Enterprise Layer, not Eloquent models.
+
 ### Interface Adapters Layer
 
 **General Guidelines:**
