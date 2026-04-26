@@ -11,5 +11,11 @@ it('should return a list of clients for authenticated user', function () {
 
     $response = actingAs($user)->get(route('clients.index'));
 
-    $response->assertOk();
+    $response->assertInertia(fn ($page) => $page
+        ->component('client/ClientsList')
+        ->has('clients', 3)
+        ->where('clients.0.name', $clients[0]->name)
+        ->where('clients.1.name', $clients[1]->name)
+        ->where('clients.2.name', $clients[2]->name)
+    );
 });
