@@ -8,19 +8,27 @@
 
         <div class="mx-3 border-t border-slate-800/80"></div>
 
-        <nav class="px-3 py-5">
+        <nav class="flex flex-col gap-1 px-3 py-5">
             <a
                 href="/dashboard"
-                class="flex items-center rounded-lg bg-slate-800 px-3 py-2 text-sm font-medium text-white"
+                :class="currentPath === '/dashboard' ? 'flex items-center rounded-lg bg-slate-800 px-3 py-2 text-sm font-medium text-white' : 'flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white'"
             >
                 Dashboard
             </a>
             <a
                 href="/clients"
-                class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white"
+                :class="currentPath === '/clients' ? 'flex items-center rounded-lg bg-slate-800 px-3 py-2 text-sm font-medium text-white' : 'flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white'"
             >
                 Clients
             </a>
         </nav>
     </aside>
 </template>
+
+<script setup lang="ts">
+import { usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
+
+const page = usePage()
+const currentPath = computed(() => page.url)
+</script>
