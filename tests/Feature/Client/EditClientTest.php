@@ -12,7 +12,7 @@ it('should render edit form with client data', function () {
     $response = actingAs($user)->get(route('clients.edit', $client->id));
 
     $response->assertInertia(fn ($page) => $page
-        ->component('client/ClientForm')
+        ->component('Client/ClientForm')
         ->has('client')
         ->where('client.id', $client->id)
         ->where('client.name', 'Existing Client')

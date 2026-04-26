@@ -19,7 +19,7 @@ class ClientController extends Controller
     {
         $clients = $useCase->execute();
 
-        return Inertia::render('client/ClientsList', [
+        return Inertia::render('Client/ClientsList', [
             'clients' => array_map(fn ($client) => $client->toArray(), $clients),
             'successMessage' => session('success'),
         ]);
@@ -27,7 +27,7 @@ class ClientController extends Controller
 
     public function create()
     {
-        return Inertia::render('client/ClientForm');
+        return Inertia::render('Client/ClientForm');
     }
 
     public function edit(int $id, GetClientByIDUseCase $useCase)
@@ -35,7 +35,7 @@ class ClientController extends Controller
         try {
             $client = $useCase->execute($id);
 
-            return Inertia::render('client/ClientForm', [
+            return Inertia::render('Client/ClientForm', [
                 'client' => $client->toArray(),
             ]);
         } catch (NotFoundException $e) {
