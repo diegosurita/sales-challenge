@@ -1,21 +1,21 @@
 <template>
     <div v-if="isVisible && message" class="fixed bottom-4 right-4 z-50 flex items-center p-4 text-sm border rounded-lg"
         :class="toastClasses" role="alert">
-        <ToastIcon :type="type" />
+        <i v-if="type === 'success'" class="pi pi-check text-green-800" style="font-size: 24px;"></i>
+        <i v-else class="pi pi-exclamation-triangle text-red-800" style="font-size: 24px;"></i>
+        <span class="sr-only">{{ type === 'success' ? 'Check icon' : 'Error icon' }}</span>
         <div>{{ message }}</div>
         <button @click="close"
             class="ml-auto -mx-1.5 -my-1.5 bg-transparent text-gray-400 hover:text-gray-900 rounded-lg p-1.5 inline-flex h-8 w-8 items-center hover:cursor-pointer"
             aria-label="Close">
             <span class="sr-only">Close</span>
-            <CloseIcon />
+            <i class="pi pi-times"></i>
         </button>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
-import CloseIcon from '@/icons/CloseIcon.vue';
-import ToastIcon from '@/icons/ToastIcon.vue';
 
 interface Props {
     message?: string;

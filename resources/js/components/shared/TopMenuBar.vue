@@ -37,7 +37,7 @@ onKeyStroke('Escape', closeDropdown);
             <div class="flex items-center gap-3">
                 <div class="relative" ref="dropdownRef">
                     <button @click="toggleDropdown"
-                        class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-sky-600 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                        class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-sky-600 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 hover:cursor-pointer"
                         aria-haspopup="menu" :aria-expanded="isOpen">
                         SC
                     </button>

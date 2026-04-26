@@ -13,12 +13,14 @@
                 href="/dashboard"
                 :class="currentPath === '/dashboard' ? 'flex items-center rounded-lg bg-slate-800 px-3 py-2 text-sm font-medium text-white' : 'flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white'"
             >
+                <i class="pi pi-chart-line mr-2"></i>
                 Dashboard
             </a>
             <a
                 href="/clients"
                 :class="currentPath === '/clients' ? 'flex items-center rounded-lg bg-slate-800 px-3 py-2 text-sm font-medium text-white' : 'flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white'"
             >
+                <i class="pi pi-users mr-2"></i>
                 Clients
             </a>
         </nav>
