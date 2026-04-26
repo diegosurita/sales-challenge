@@ -6,8 +6,8 @@ use Module\Service\Core\UseCases\GetServicesUseCase;
 
 it('should return all services from repository', function () {
     $services = [
-        new ServiceEntity(id: 1, name: 'Service 1', price: 10),
-        new ServiceEntity(id: 2, name: 'Service 2', price: 20),
+        new ServiceEntity(id: 1, name: 'Service 1', price: 10, available: true),
+        new ServiceEntity(id: 2, name: 'Service 2', price: 20, available: false),
     ];
 
     $repository = mock(ServiceRepositoryContract::class);

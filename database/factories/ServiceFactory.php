@@ -25,6 +25,7 @@ class ServiceFactory extends Factory
         return [
             'name' => fake()->words(asText: true, nb: 2),
             'price' => fake()->randomFloat(nbMaxDecimals: 2, min: 1, max: 10000),
+            'available' => fake()->boolean(),
         ];
     }
 }

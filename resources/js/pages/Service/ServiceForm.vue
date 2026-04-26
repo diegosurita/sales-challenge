@@ -4,7 +4,7 @@ import { computed, reactive } from 'vue';
 import InternalBaseLayout from '@/components/Shared/InternalBaseLayout.vue';
 
 interface Props {
-    service?: { id: number; name: string; price: number };
+    service?: { id: number; name: string; price: number; available: boolean };
 }
 
 const props = defineProps<Props>();
@@ -16,6 +16,7 @@ const isEditMode = computed(() => !!props.service);
 const form = reactive({
     name: props.service?.name || '',
     price: props.service?.price?.toString() || '',
+    available: props.service?.available ?? true,
 });
 
 const onSubmit = (event: SubmitEvent) => {
@@ -81,6 +82,21 @@ const resetFieldError = (field: string) => {
                     required
                 />
                 <p v-if="page.props.errors?.price" class="mt-1 text-sm text-red-500">{{ page.props.errors.price }}</p>
+            </div>
+
+            <div>
+                <label for="available" class="flex items-center">
+                    <input type="hidden" name="available" :value="form.available ? '1' : '0'" />
+                    <input
+                        id="available"
+                        v-model="form.available"
+                        type="checkbox"
+                        class="mr-2 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
+                        @change="resetFieldError('available')"
+                    />
+                    <span class="text-sm font-medium text-slate-700">Available</span>
+                </label>
+                <p v-if="page.props.errors?.available" class="mt-1 text-sm text-red-500">{{ page.props.errors.available }}</p>
             </div>
 
             <input v-if="isEditMode" type="hidden" name="_method" value="PUT" />

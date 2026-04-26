@@ -16,6 +16,7 @@ interface Service {
     id: number;
     name: string;
     price: number;
+    available: boolean;
 }
 
 const props = defineProps<{
@@ -24,17 +25,30 @@ const props = defineProps<{
 }>();
 
 const columnDefs: ColDef<Service>[] = [
-    { field: 'name', headerName: 'Name', sortable: true, filter: true, flex: 1 },
+    { field: 'name', headerName: 'Name', sortable: true, filter: true, flex: 1, sort: 'asc' },
     {
         field: 'price',
         headerName: 'Price',
         sortable: true,
         filter: true,
+        flex: 1,
         width: 150,
         valueFormatter: (params: ValueFormatterParams<Service, number>) => {
             const price = Number(params.value ?? 0);
 
             return `$${price.toFixed(2)}`;
+        },
+    },
+    {
+        field: 'available',
+        headerName: 'Available',
+        sortable: true,
+        filter: true,
+        flex: 1,
+        width: 100,
+        cellRenderer: null,
+        valueFormatter: (params: ValueFormatterParams<Service, boolean>) => {
+            return params.value ? 'Yes' : 'No';
         },
     },
     { headerName: 'Actions', cellRenderer: ServiceActions, width: 100, sortable: false, filter: false },

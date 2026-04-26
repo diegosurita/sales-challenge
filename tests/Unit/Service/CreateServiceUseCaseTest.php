@@ -8,6 +8,7 @@ it('should create a service via repository', function () {
     $dto = new ServiceFormDTO(
         name: 'New Service',
         price: 150,
+        available: true,
     );
 
     $repository = mock(ServiceRepositoryContract::class);

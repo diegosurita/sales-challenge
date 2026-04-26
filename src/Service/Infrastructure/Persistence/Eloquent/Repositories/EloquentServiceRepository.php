@@ -17,6 +17,7 @@ class EloquentServiceRepository implements ServiceRepositoryContract
             id: $service->id,
             name: $service->name,
             price: (float) $service->price,
+            available: $service->available,
         ))->toArray();
     }
 
@@ -25,6 +26,7 @@ class EloquentServiceRepository implements ServiceRepositoryContract
         Service::create([
             'name' => $dto->name,
             'price' => $dto->price,
+            'available' => $dto->available,
         ]);
     }
 
@@ -40,6 +42,7 @@ class EloquentServiceRepository implements ServiceRepositoryContract
             id: $service->id,
             name: $service->name,
             price: (float) $service->price,
+            available: $service->available,
         );
     }
 
@@ -58,6 +61,7 @@ class EloquentServiceRepository implements ServiceRepositoryContract
         $service->update([
             'name' => $dto->name,
             'price' => $dto->price,
+            'available' => $dto->available,
         ]);
     }
 

@@ -8,6 +8,7 @@ final class ServiceEntity
         private readonly int $id,
         private readonly string $name,
         private readonly float $price,
+        private readonly bool $available,
     ) {}
 
     public function getId(): int
@@ -25,12 +26,18 @@ final class ServiceEntity
         return $this->price;
     }
 
+    public function getAvailable(): bool
+    {
+        return $this->available;
+    }
+
     public function toArray(): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
             'price' => $this->price,
+            'available' => $this->available,
         ];
     }
 }

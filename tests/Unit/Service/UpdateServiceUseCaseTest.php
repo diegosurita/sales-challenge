@@ -8,6 +8,7 @@ it('should update a service via repository', function () {
     $dto = new ServiceFormDTO(
         name: 'Updated Service',
         price: 250,
+        available: true,
         id: 1,
     );
 

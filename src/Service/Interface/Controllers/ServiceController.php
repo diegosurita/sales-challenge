@@ -48,11 +48,13 @@ class ServiceController extends Controller
         $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'available' => 'boolean',
         ]);
 
         $dto = new ServiceFormDTO(
             name: $request->name,
             price: (float) $request->price,
+            available: $request->boolean('available', true),
         );
 
         $useCase->execute($dto);
@@ -67,11 +69,13 @@ class ServiceController extends Controller
         $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'available' => 'boolean',
         ]);
 
         $dto = new ServiceFormDTO(
             name: $request->name,
             price: (float) $request->price,
+            available: $request->boolean('available', true),
             id: $id,
         );
 

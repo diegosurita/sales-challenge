@@ -6,7 +6,7 @@ use Module\Service\Core\UseCases\GetServiceByIDUseCase;
 use Module\Shared\Core\Exceptions\NotFoundException;
 
 it('should return service when found', function () {
-    $service = new ServiceEntity(id: 1, name: 'Test Service', price: 100);
+    $service = new ServiceEntity(id: 1, name: 'Test Service', price: 100, available: true);
 
     $repository = mock(ServiceRepositoryContract::class);
     $repository->shouldReceive('getByID')->with(1)->once()->andReturn($service);
