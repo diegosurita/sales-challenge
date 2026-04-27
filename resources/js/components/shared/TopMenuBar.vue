@@ -48,7 +48,7 @@ onKeyStroke('Escape', closeDropdown);
                         <button
                             class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none hover:cursor-pointer"
                             role="menuitem" @click="handleLogout">
-                            Sign out
+                            <i class="pi pi-sign-out mr-2"></i>Sign out
                         </button>
                     </div>
                 </div>

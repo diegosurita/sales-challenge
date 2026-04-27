@@ -14,4 +14,9 @@ class LaravelUserAuthenticationService implements UserAuthenticationServiceContr
             'password' => $password,
         ]);
     }
+
+    public function logout(): void
+    {
+        Auth::logout();
+    }
 }

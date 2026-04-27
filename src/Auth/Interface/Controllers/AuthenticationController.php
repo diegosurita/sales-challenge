@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Module\Auth\Core\UseCases\AuthenticateUserUseCase;
+use Module\Auth\Core\UseCases\LogoutUserUseCase;
 
 class AuthenticationController extends Controller
 {
@@ -34,8 +35,13 @@ class AuthenticationController extends Controller
         return redirect()->intended(route('dashboard'));
     }
 
-    public function logout(Request $request): void
+    public function logout(Request $request, LogoutUserUseCase $logoutUserUseCase): RedirectResponse
     {
-        // implement logout
+        $logoutUserUseCase->execute();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('home');
     }
 }
