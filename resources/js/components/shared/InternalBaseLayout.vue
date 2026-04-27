@@ -16,7 +16,9 @@ defineProps<{
                 <TopMenuBar :title="title" />
 
                 <main class="mx-auto w-full flex-1 px-4 py-4">
-                    <div class="rounded-lg border border-slate-200 bg-white p-4 shadow-2xs sm:p-4">
+                    <div
+                        class="rounded-lg border border-slate-200 bg-white p-4 shadow-2xs sm:p-4"
+                    >
                         <slot />
                     </div>
                 </main>

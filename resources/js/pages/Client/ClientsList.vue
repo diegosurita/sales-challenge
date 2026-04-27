@@ -23,8 +23,20 @@ const props = defineProps<{
 }>();
 
 const columnDefs: ColDef<Client>[] = [
-    { field: 'name', headerName: 'Name', sortable: true, filter: true, flex: 1 },
-    { headerName: 'Actions', cellRenderer: ClientActions, width: 100, sortable: false, filter: false },
+    {
+        field: 'name',
+        headerName: 'Name',
+        sortable: true,
+        filter: true,
+        flex: 1,
+    },
+    {
+        headerName: 'Actions',
+        cellRenderer: ClientActions,
+        width: 100,
+        sortable: false,
+        filter: false,
+    },
 ];
 
 const rowData = props.clients;
@@ -45,7 +57,9 @@ const confirmDelete = async () => {
     }
 
     try {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute('content');
         const response = await fetch(destroy(clientToDelete.value).url, {
             method: 'DELETE',
             headers: {
@@ -86,8 +100,11 @@ const gridOptions: GridOptions = {
     <Head title="Clients" />
 
     <InternalBaseLayout title="Clients">
-        <div class="flex justify-end mb-4">
-            <a href="/clients/create" class="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 hover:cursor-pointer hover:bg-sky-700">
+        <div class="mb-4 flex justify-end">
+            <a
+                href="/clients/create"
+                class="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:cursor-pointer hover:bg-sky-700 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+            >
                 New
             </a>
         </div>

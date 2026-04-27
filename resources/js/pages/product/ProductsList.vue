@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
-import type { ColDef, GridOptions, ValueFormatterParams } from 'ag-grid-community';
+import type {
+    ColDef,
+    GridOptions,
+    ValueFormatterParams,
+} from 'ag-grid-community';
 import { AgGridVue } from 'ag-grid-vue3';
 import { ref } from 'vue';
 import { destroy } from '@/actions/Module/Product/Interface/Controllers/ProductController';
@@ -25,7 +29,13 @@ const props = defineProps<{
 }>();
 
 const columnDefs: ColDef<Product>[] = [
-    { field: 'name', headerName: 'Name', sortable: true, filter: true, flex: 1 },
+    {
+        field: 'name',
+        headerName: 'Name',
+        sortable: true,
+        filter: true,
+        flex: 1,
+    },
     {
         field: 'price',
         headerName: 'Price',
@@ -48,7 +58,13 @@ const columnDefs: ColDef<Product>[] = [
             return String(params.value ?? 0);
         },
     },
-    { headerName: 'Actions', cellRenderer: ProductActions, width: 100, sortable: false, filter: false },
+    {
+        headerName: 'Actions',
+        cellRenderer: ProductActions,
+        width: 100,
+        sortable: false,
+        filter: false,
+    },
 ];
 
 const rowData = props.products;
@@ -69,7 +85,9 @@ const confirmDelete = async () => {
     }
 
     try {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute('content');
         const response = await fetch(destroy(productToDelete.value).url, {
             method: 'DELETE',
             headers: {

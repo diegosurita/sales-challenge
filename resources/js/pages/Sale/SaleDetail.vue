@@ -52,26 +52,30 @@ const ordinalSuffix = (number: number): string => {
     }
 
     if (remainder10 === 1) {
-return `${number}st`;
-}
+        return `${number}st`;
+    }
 
     if (remainder10 === 2) {
-return `${number}nd`;
-}
+        return `${number}nd`;
+    }
 
     if (remainder10 === 3) {
-return `${number}rd`;
-}
+        return `${number}rd`;
+    }
 
     return `${number}th`;
 };
 
-const dailyPurchaseLabel = computed(() =>
-    `${ordinalSuffix(props.sale.client_daily_purchase_number)} purchase of the day`,
+const dailyPurchaseLabel = computed(
+    () =>
+        `${ordinalSuffix(props.sale.client_daily_purchase_number)} purchase of the day`,
 );
 
 const productsTotal = computed(() =>
-    props.sale.products.reduce((sum, product) => sum + product.price * product.quantity, 0),
+    props.sale.products.reduce(
+        (sum, product) => sum + product.price * product.quantity,
+        0,
+    ),
 );
 
 const servicesTotal = computed(() => {
@@ -86,7 +90,10 @@ console.log('Services Total:', servicesTotal.value);
 const total = computed(() => productsTotal.value + servicesTotal.value);
 
 const formatCurrency = (value: number): string =>
-    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+    new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(value);
 
 const goBack = () => router.visit('/sales');
 </script>
@@ -99,7 +106,7 @@ const goBack = () => router.visit('/sales');
             <!-- Header -->
             <div class="flex items-start justify-between">
                 <button
-                    class="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm text-slate-600 ring-1 ring-slate-200 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400"
+                    class="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm text-slate-600 ring-1 ring-slate-200 transition hover:bg-slate-50 hover:text-slate-900 focus:ring-2 focus:ring-slate-400 focus:outline-none"
                     type="button"
                     @click="goBack"
                 >
@@ -112,22 +119,40 @@ const goBack = () => router.visit('/sales');
             <div class="rounded-lg border border-slate-200 bg-slate-50 p-5">
                 <div class="flex flex-wrap items-center gap-4">
                     <div>
-                        <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Sale ID</p>
-                        <p class="mt-0.5 text-xl font-semibold text-slate-900">#{{ sale.id }}</p>
+                        <p
+                            class="text-xs font-medium tracking-wide text-slate-500 uppercase"
+                        >
+                            Sale ID
+                        </p>
+                        <p class="mt-0.5 text-xl font-semibold text-slate-900">
+                            #{{ sale.id }}
+                        </p>
                     </div>
 
                     <div class="h-8 w-px bg-slate-200"></div>
 
                     <div>
-                        <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Client</p>
-                        <p class="mt-0.5 text-base font-medium text-slate-900">{{ sale.client_name }}</p>
+                        <p
+                            class="text-xs font-medium tracking-wide text-slate-500 uppercase"
+                        >
+                            Client
+                        </p>
+                        <p class="mt-0.5 text-base font-medium text-slate-900">
+                            {{ sale.client_name }}
+                        </p>
                     </div>
 
                     <div class="h-8 w-px bg-slate-200"></div>
 
                     <div>
-                        <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Date</p>
-                        <p class="mt-0.5 text-base text-slate-900">{{ formattedDate }}</p>
+                        <p
+                            class="text-xs font-medium tracking-wide text-slate-500 uppercase"
+                        >
+                            Date
+                        </p>
+                        <p class="mt-0.5 text-base text-slate-900">
+                            {{ formattedDate }}
+                        </p>
                     </div>
 
                     <div class="h-8 w-px bg-slate-200"></div>
@@ -145,15 +170,35 @@ const goBack = () => router.visit('/sales');
 
             <!-- Products Section -->
             <div v-if="sale.products.length > 0">
-                <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Products</h2>
+                <h2
+                    class="mb-3 text-sm font-semibold tracking-wide text-slate-500 uppercase"
+                >
+                    Products
+                </h2>
                 <div class="overflow-hidden rounded-lg border border-slate-200">
                     <table class="w-full text-sm">
                         <thead class="bg-slate-50">
                             <tr>
-                                <th class="px-4 py-3 text-left font-medium text-slate-600">Name</th>
-                                <th class="px-4 py-3 text-right font-medium text-slate-600">Unit Price</th>
-                                <th class="px-4 py-3 text-right font-medium text-slate-600">Qty</th>
-                                <th class="px-4 py-3 text-right font-medium text-slate-600">Subtotal</th>
+                                <th
+                                    class="px-4 py-3 text-left font-medium text-slate-600"
+                                >
+                                    Name
+                                </th>
+                                <th
+                                    class="px-4 py-3 text-right font-medium text-slate-600"
+                                >
+                                    Unit Price
+                                </th>
+                                <th
+                                    class="px-4 py-3 text-right font-medium text-slate-600"
+                                >
+                                    Qty
+                                </th>
+                                <th
+                                    class="px-4 py-3 text-right font-medium text-slate-600"
+                                >
+                                    Subtotal
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 bg-white">
@@ -162,20 +207,37 @@ const goBack = () => router.visit('/sales');
                                 :key="product.product_id"
                                 class="hover:bg-slate-50"
                             >
-                                <td class="px-4 py-3 text-slate-900">{{ product.name }}</td>
-                                <td class="px-4 py-3 text-right text-slate-700">{{ formatCurrency(product.price) }}</td>
-                                <td class="px-4 py-3 text-right text-slate-700">{{ product.quantity }}</td>
-                                <td class="px-4 py-3 text-right font-medium text-slate-900">
-                                    {{ formatCurrency(product.price * product.quantity) }}
+                                <td class="px-4 py-3 text-slate-900">
+                                    {{ product.name }}
+                                </td>
+                                <td class="px-4 py-3 text-right text-slate-700">
+                                    {{ formatCurrency(product.price) }}
+                                </td>
+                                <td class="px-4 py-3 text-right text-slate-700">
+                                    {{ product.quantity }}
+                                </td>
+                                <td
+                                    class="px-4 py-3 text-right font-medium text-slate-900"
+                                >
+                                    {{
+                                        formatCurrency(
+                                            product.price * product.quantity,
+                                        )
+                                    }}
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot class="bg-slate-50">
                             <tr>
-                                <td colspan="3" class="px-4 py-3 text-right text-sm font-semibold text-slate-700">
+                                <td
+                                    colspan="3"
+                                    class="px-4 py-3 text-right text-sm font-semibold text-slate-700"
+                                >
                                     Products Total
                                 </td>
-                                <td class="px-4 py-3 text-right font-bold text-slate-900">
+                                <td
+                                    class="px-4 py-3 text-right font-bold text-slate-900"
+                                >
                                     {{ formatCurrency(productsTotal) }}
                                 </td>
                             </tr>
@@ -186,13 +248,25 @@ const goBack = () => router.visit('/sales');
 
             <!-- Services Section -->
             <div v-if="sale.services.length > 0">
-                <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Services</h2>
+                <h2
+                    class="mb-3 text-sm font-semibold tracking-wide text-slate-500 uppercase"
+                >
+                    Services
+                </h2>
                 <div class="overflow-hidden rounded-lg border border-slate-200">
                     <table class="w-full text-sm">
                         <thead class="bg-slate-50">
                             <tr>
-                                <th class="px-4 py-3 text-left font-medium text-slate-600">Name</th>
-                                <th class="px-4 py-3 text-right font-medium text-slate-600">Price</th>
+                                <th
+                                    class="px-4 py-3 text-left font-medium text-slate-600"
+                                >
+                                    Name
+                                </th>
+                                <th
+                                    class="px-4 py-3 text-right font-medium text-slate-600"
+                                >
+                                    Price
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 bg-white">
@@ -201,16 +275,24 @@ const goBack = () => router.visit('/sales');
                                 :key="service.service_id"
                                 class="hover:bg-slate-50"
                             >
-                                <td class="px-4 py-3 text-slate-900">{{ service.name }}</td>
-                                <td class="px-4 py-3 text-right text-slate-700">{{ formatCurrency(service.price) }}</td>
+                                <td class="px-4 py-3 text-slate-900">
+                                    {{ service.name }}
+                                </td>
+                                <td class="px-4 py-3 text-right text-slate-700">
+                                    {{ formatCurrency(service.price) }}
+                                </td>
                             </tr>
                         </tbody>
                         <tfoot class="bg-slate-50">
                             <tr>
-                                <td class="px-4 py-3 text-right text-sm font-semibold text-slate-700">
+                                <td
+                                    class="px-4 py-3 text-right text-sm font-semibold text-slate-700"
+                                >
                                     Services Total
                                 </td>
-                                <td class="px-4 py-3 text-right font-bold text-slate-900">
+                                <td
+                                    class="px-4 py-3 text-right font-bold text-slate-900"
+                                >
                                     {{ formatCurrency(servicesTotal) }}
                                 </td>
                             </tr>
@@ -221,10 +303,16 @@ const goBack = () => router.visit('/sales');
 
             <!-- Grand Total -->
             <div class="flex justify-end">
-                <div class="rounded-lg border border-slate-200 bg-slate-900 px-6 py-4 text-white">
+                <div
+                    class="rounded-lg border border-slate-200 bg-slate-900 px-6 py-4 text-white"
+                >
                     <div class="flex items-center gap-8">
-                        <span class="text-sm font-medium text-slate-300">Total</span>
-                        <span class="text-xl font-bold">{{ formatCurrency(total) }}</span>
+                        <span class="text-sm font-medium text-slate-300"
+                            >Total</span
+                        >
+                        <span class="text-xl font-bold">{{
+                            formatCurrency(total)
+                        }}</span>
                     </div>
                 </div>
             </div>

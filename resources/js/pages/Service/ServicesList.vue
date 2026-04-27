@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
-import type { ColDef, GridOptions, ValueFormatterParams } from 'ag-grid-community';
+import type {
+    ColDef,
+    GridOptions,
+    ValueFormatterParams,
+} from 'ag-grid-community';
 import { AgGridVue } from 'ag-grid-vue3';
 import { ref } from 'vue';
 import { destroy } from '@/actions/Module/Service/Interface/Controllers/ServiceController';
@@ -26,7 +30,14 @@ const props = defineProps<{
 }>();
 
 const columnDefs: ColDef<Service>[] = [
-    { field: 'name', headerName: 'Name', sortable: true, filter: true, flex: 1, sort: 'asc' },
+    {
+        field: 'name',
+        headerName: 'Name',
+        sortable: true,
+        filter: true,
+        flex: 1,
+        sort: 'asc',
+    },
     {
         field: 'price',
         headerName: 'Price',
@@ -58,11 +69,22 @@ const columnDefs: ColDef<Service>[] = [
         sortable: true,
         filter: true,
         flex: 1,
-        valueFormatter: (params: ValueFormatterParams<Service, { id: number; name: string } | null>) => {
+        valueFormatter: (
+            params: ValueFormatterParams<
+                Service,
+                { id: number; name: string } | null
+            >,
+        ) => {
             return params.value?.name ?? '—';
         },
     },
-    { headerName: 'Actions', cellRenderer: ServiceActions, width: 100, sortable: false, filter: false },
+    {
+        headerName: 'Actions',
+        cellRenderer: ServiceActions,
+        width: 100,
+        sortable: false,
+        filter: false,
+    },
 ];
 
 const rowData = props.services;
@@ -83,7 +105,9 @@ const confirmDelete = async () => {
     }
 
     try {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute('content');
         const response = await fetch(destroy(serviceToDelete.value).url, {
             method: 'DELETE',
             headers: {

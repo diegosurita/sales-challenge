@@ -30,39 +30,77 @@ const resetFieldError = (field: string) => {
 </script>
 
 <template>
-    <section class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-        <form action="/auth/login" method="post" class="mx-auto flex w-full max-w-md flex-col items-center gap-4"
-            @submit.prevent="onSubmit">
-            <div v-if="page.props.errors?.failed" class="w-full text-red-500 text-sm bg-red-50 p-2 rounded mb-4">{{
-                page.props.errors.failed }}</div>
+    <section
+        class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
+    >
+        <form
+            action="/auth/login"
+            method="post"
+            class="mx-auto flex w-full max-w-md flex-col items-center gap-4"
+            @submit.prevent="onSubmit"
+        >
+            <div
+                v-if="page.props.errors?.failed"
+                class="mb-4 w-full rounded bg-red-50 p-2 text-sm text-red-500"
+            >
+                {{ page.props.errors.failed }}
+            </div>
             <div class="w-full">
-                <label for="email" class="mb-1 block text-sm font-medium text-slate-700">
+                <label
+                    for="email"
+                    class="mb-1 block text-sm font-medium text-slate-700"
+                >
                     Email
                 </label>
-                <input id="email" v-model="form.email" type="email" name="email" autocomplete="email"
-                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                <input
+                    id="email"
+                    v-model="form.email"
+                    type="email"
+                    name="email"
+                    autocomplete="email"
+                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 transition outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     placeholder="you@example.com"
                     required
-                    @input="resetFieldError('email')" />
-                <p v-if="page.props.errors?.email" class="text-red-500 text-sm mt-1">{{ page.props.errors.email }}</p>
-            </div>
-
-            <div class="w-full">
-                <label for="password" class="mb-1 block text-sm font-medium text-slate-700">
-                    Password
-                </label>
-                <input id="password" v-model="form.password" type="password" name="password"
-                    autocomplete="current-password"
-                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                    placeholder="••••••••"
-                    required
-                    @input="resetFieldError('password')" />
-                <p v-if="page.props.errors?.password" class="text-red-500 text-sm mt-1">{{ page.props.errors.password }}
+                    @input="resetFieldError('email')"
+                />
+                <p
+                    v-if="page.props.errors?.email"
+                    class="mt-1 text-sm text-red-500"
+                >
+                    {{ page.props.errors.email }}
                 </p>
             </div>
 
-            <button type="submit"
-                class="mt-1 inline-flex w-full items-center justify-center rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 hover:cursor-pointer">
+            <div class="w-full">
+                <label
+                    for="password"
+                    class="mb-1 block text-sm font-medium text-slate-700"
+                >
+                    Password
+                </label>
+                <input
+                    id="password"
+                    v-model="form.password"
+                    type="password"
+                    name="password"
+                    autocomplete="current-password"
+                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 transition outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    placeholder="••••••••"
+                    required
+                    @input="resetFieldError('password')"
+                />
+                <p
+                    v-if="page.props.errors?.password"
+                    class="mt-1 text-sm text-red-500"
+                >
+                    {{ page.props.errors.password }}
+                </p>
+            </div>
+
+            <button
+                type="submit"
+                class="mt-1 inline-flex w-full items-center justify-center rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:cursor-pointer hover:bg-sky-700 focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:outline-none"
+            >
                 Login
             </button>
         </form>

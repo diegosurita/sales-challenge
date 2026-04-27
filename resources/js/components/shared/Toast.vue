@@ -1,13 +1,21 @@
 <template>
-    <div v-if="isVisible && message" class="fixed bottom-4 right-4 z-50 flex items-center p-4 text-sm border rounded-lg"
-        :class="toastClasses" role="alert">
+    <div
+        v-if="isVisible && message"
+        class="fixed right-4 bottom-4 z-50 flex items-center rounded-lg border p-4 text-sm"
+        :class="toastClasses"
+        role="alert"
+    >
         <i v-if="type === 'success'" class="pi pi-check text-green-800"></i>
         <i v-else class="pi pi-exclamation-triangle text-red-800"></i>
-        <span class="sr-only ml-2">{{ type === 'success' ? 'Check icon' : 'Error icon' }}</span>
+        <span class="sr-only ml-2">{{
+            type === 'success' ? 'Check icon' : 'Error icon'
+        }}</span>
         <div class="ml-2">{{ message }}</div>
-        <button @click="close"
-            class="ml-auto -mx-1.5 -my-1.5 bg-transparent text-gray-400 hover:text-gray-900 rounded-lg p-1.5 inline-flex h-8 w-8 items-center hover:cursor-pointer"
-            aria-label="Close">
+        <button
+            @click="close"
+            class="-mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center rounded-lg bg-transparent p-1.5 text-gray-400 hover:cursor-pointer hover:text-gray-900"
+            aria-label="Close"
+        >
             <span class="sr-only">Close</span>
             <i class="pi pi-times"></i>
         </button>
@@ -34,17 +42,21 @@ const close = () => {
     isVisible.value = false;
 };
 
-watch(() => props.message, (newMessage) => {
-    if (newMessage) {
-        isVisible.value = true;
+watch(
+    () => props.message,
+    (newMessage) => {
+        if (newMessage) {
+            isVisible.value = true;
 
-        if (props.dismissTime > 0) {
-            setTimeout(() => {
-                isVisible.value = false;
-            }, props.dismissTime);
+            if (props.dismissTime > 0) {
+                setTimeout(() => {
+                    isVisible.value = false;
+                }, props.dismissTime);
+            }
         }
-    }
-}, { immediate: true });
+    },
+    { immediate: true },
+);
 
 const toastClasses = computed(() => {
     if (props.type === 'success') {

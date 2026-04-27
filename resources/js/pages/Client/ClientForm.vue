@@ -36,14 +36,21 @@ const resetFieldError = (field: string) => {
 };
 </script>
 
-
 <template>
     <Head :title="isEditMode ? 'Edit Client' : 'Create Client'" />
 
     <InternalBaseLayout :title="isEditMode ? 'Edit Client' : 'Create Client'">
-        <form :action="isEditMode ? `/clients/${props.client!.id}` : '/clients'" method="post" class="max-w-md space-y-4" @submit.prevent="onSubmit">
+        <form
+            :action="isEditMode ? `/clients/${props.client!.id}` : '/clients'"
+            method="post"
+            class="max-w-md space-y-4"
+            @submit.prevent="onSubmit"
+        >
             <div>
-                <label for="name" class="block text-sm font-medium text-slate-700">
+                <label
+                    for="name"
+                    class="block text-sm font-medium text-slate-700"
+                >
                     Name
                 </label>
                 <input
@@ -51,29 +58,34 @@ const resetFieldError = (field: string) => {
                     v-model="form.name"
                     type="text"
                     name="name"
-                    class="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    class="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 transition outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     placeholder="Client name"
                     @input="resetFieldError('name')"
                     required
                 />
-                <p v-if="page.props.errors?.name" class="text-red-500 text-sm mt-1">{{ page.props.errors.name }}</p>
+                <p
+                    v-if="page.props.errors?.name"
+                    class="mt-1 text-sm text-red-500"
+                >
+                    {{ page.props.errors.name }}
+                </p>
             </div>
 
             <input v-if="isEditMode" type="hidden" name="_method" value="PUT" />
 
-            <hr class="border-slate-200 my-4" />
+            <hr class="my-4 border-slate-200" />
 
             <div class="flex space-x-3">
                 <button
                     type="button"
                     @click="router.visit('/clients')"
-                    class="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 hover:cursor-pointer"
+                    class="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:cursor-pointer hover:bg-slate-50 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
                 >
                     Cancel
                 </button>
                 <button
                     type="submit"
-                    class="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white bg-sky-600 hover:bg-sky-700 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 hover:cursor-pointer"
+                    class="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:cursor-pointer hover:bg-sky-700 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
                 >
                     Save
                 </button>

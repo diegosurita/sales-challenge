@@ -12,12 +12,18 @@ import LoginForm from '../../components/Auth/LoginForm.vue';
         <main
             class="w-full max-w-4xl rounded-2xl bg-white/95 p-6 backdrop-blur sm:p-8"
         >
-            <div class="mx-auto flex w-full max-w-3xl flex-col items-center gap-6">
+            <div
+                class="mx-auto flex w-full max-w-3xl flex-col items-center gap-6"
+            >
                 <header class="w-full text-center">
-                    <p class="text-xs font-semibold tracking-[0.14em] text-sky-700">
+                    <p
+                        class="text-xs font-semibold tracking-[0.14em] text-sky-700"
+                    >
                         SALES CHALLENGE
                     </p>
-                    <h1 class="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">
+                    <h1
+                        class="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl"
+                    >
                         Welcome
                     </h1>
                 </header>

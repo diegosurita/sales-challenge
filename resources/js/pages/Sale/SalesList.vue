@@ -23,7 +23,13 @@ const props = defineProps<{
 }>();
 
 const columnDefs: ColDef<Sale>[] = [
-    { field: 'client_name', headerName: 'Client', sortable: true, filter: true, flex: 1 },
+    {
+        field: 'client_name',
+        headerName: 'Client',
+        sortable: true,
+        filter: true,
+        flex: 1,
+    },
     {
         field: 'created_at',
         headerName: 'Created At',
@@ -68,7 +74,13 @@ const columnDefs: ColDef<Sale>[] = [
         },
         flex: 1,
     },
-    { headerName: 'Actions', cellRenderer: SaleActions, width: 100, sortable: false, filter: false },
+    {
+        headerName: 'Actions',
+        cellRenderer: SaleActions,
+        width: 100,
+        sortable: false,
+        filter: false,
+    },
 ];
 
 const rowData = props.sales;
@@ -89,7 +101,9 @@ const confirmDelete = async () => {
     }
 
     try {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute('content');
         const response = await fetch(`/sales/${saleToDelete.value}`, {
             method: 'DELETE',
             headers: {
@@ -127,23 +141,33 @@ const gridOptions: GridOptions = {
 </script>
 
 <template>
-
     <Head title="Sales" />
 
     <InternalBaseLayout title="Sales">
-        <div class="flex justify-end mb-4">
-            <a href="/sales/create"
-                class="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 hover:cursor-pointer hover:bg-sky-700">
+        <div class="mb-4 flex justify-end">
+            <a
+                href="/sales/create"
+                class="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:cursor-pointer hover:bg-sky-700 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+            >
                 New
             </a>
         </div>
 
         <Toast :message="toastMessage || successMessage" :type="toastType" />
 
-        <AgGridVue :columnDefs="columnDefs" :rowData="rowData" :gridOptions="gridOptions" class="ag-theme-alpine" />
+        <AgGridVue
+            :columnDefs="columnDefs"
+            :rowData="rowData"
+            :gridOptions="gridOptions"
+            class="ag-theme-alpine"
+        />
 
-        <ConfirmationModal :is-open="isModalOpen" title="Delete Sale"
-            message="Are you sure you want to delete this sale? This action cannot be undone." @close="closeModal"
-            @confirm="confirmDelete" />
+        <ConfirmationModal
+            :is-open="isModalOpen"
+            title="Delete Sale"
+            message="Are you sure you want to delete this sale? This action cannot be undone."
+            @close="closeModal"
+            @confirm="confirmDelete"
+        />
     </InternalBaseLayout>
 </template>

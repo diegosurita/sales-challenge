@@ -16,7 +16,13 @@ interface Product {
 }
 
 interface Props {
-    service?: { id: number; name: string; price: number; available: boolean; product: { id: number; name: string } | null };
+    service?: {
+        id: number;
+        name: string;
+        price: number;
+        available: boolean;
+        product: { id: number; name: string } | null;
+    };
     products: Product[];
 }
 
@@ -56,7 +62,8 @@ const filteredProducts = computed<Product[]>(() => {
     );
 });
 
-const getDisplayValue = (product: Product | null): string => product?.name ?? '';
+const getDisplayValue = (product: Product | null): string =>
+    product?.name ?? '';
 
 const onSubmit = (event: SubmitEvent) => {
     const target = event.target as HTMLFormElement;
@@ -82,13 +89,18 @@ const resetFieldError = (field: string) => {
 
     <InternalBaseLayout :title="isEditMode ? 'Edit Service' : 'Create Service'">
         <form
-            :action="isEditMode ? `/services/${props.service!.id}` : '/services'"
+            :action="
+                isEditMode ? `/services/${props.service!.id}` : '/services'
+            "
             method="post"
             class="max-w-md space-y-4"
             @submit.prevent="onSubmit"
         >
             <div>
-                <label for="name" class="block text-sm font-medium text-slate-700">
+                <label
+                    for="name"
+                    class="block text-sm font-medium text-slate-700"
+                >
                     Name
                 </label>
                 <input
@@ -96,16 +108,24 @@ const resetFieldError = (field: string) => {
                     v-model="form.name"
                     type="text"
                     name="name"
-                    class="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    class="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 transition outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     placeholder="Service name"
                     @input="resetFieldError('name')"
                     required
                 />
-                <p v-if="page.props.errors?.name" class="mt-1 text-sm text-red-500">{{ page.props.errors.name }}</p>
+                <p
+                    v-if="page.props.errors?.name"
+                    class="mt-1 text-sm text-red-500"
+                >
+                    {{ page.props.errors.name }}
+                </p>
             </div>
 
             <div>
-                <label for="price" class="block text-sm font-medium text-slate-700">
+                <label
+                    for="price"
+                    class="block text-sm font-medium text-slate-700"
+                >
                     Price
                 </label>
                 <input
@@ -115,17 +135,26 @@ const resetFieldError = (field: string) => {
                     name="price"
                     min="0"
                     step="0.01"
-                    class="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    class="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 transition outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     placeholder="0.00"
                     @input="resetFieldError('price')"
                     required
                 />
-                <p v-if="page.props.errors?.price" class="mt-1 text-sm text-red-500">{{ page.props.errors.price }}</p>
+                <p
+                    v-if="page.props.errors?.price"
+                    class="mt-1 text-sm text-red-500"
+                >
+                    {{ page.props.errors.price }}
+                </p>
             </div>
 
             <div>
                 <label for="available" class="flex items-center">
-                    <input type="hidden" name="available" :value="form.available ? '1' : '0'" />
+                    <input
+                        type="hidden"
+                        name="available"
+                        :value="form.available ? '1' : '0'"
+                    />
                     <input
                         id="available"
                         v-model="form.available"
@@ -133,37 +162,75 @@ const resetFieldError = (field: string) => {
                         class="mr-2 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
                         @change="resetFieldError('available')"
                     />
-                    <span class="text-sm font-medium text-slate-700">Available</span>
+                    <span class="text-sm font-medium text-slate-700"
+                        >Available</span
+                    >
                 </label>
-                <p v-if="page.props.errors?.available" class="mt-1 text-sm text-red-500">{{ page.props.errors.available }}</p>
+                <p
+                    v-if="page.props.errors?.available"
+                    class="mt-1 text-sm text-red-500"
+                >
+                    {{ page.props.errors.available }}
+                </p>
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-slate-700">
                     Dependent On Product
                 </label>
-                <input type="hidden" name="product_id" :value="form.productId ?? ''" />
+                <input
+                    type="hidden"
+                    name="product_id"
+                    :value="form.productId ?? ''"
+                />
                 <Combobox v-model="selectedProduct" nullable>
                     <div class="relative mt-1">
                         <ComboboxInput
-                            :display-value="(item: unknown) => getDisplayValue(item as Product | null)"
-                            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                            :display-value="
+                                (item: unknown) =>
+                                    getDisplayValue(item as Product | null)
+                            "
+                            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 transition outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                             placeholder="Search product..."
-                            @change="query = ($event.target as HTMLInputElement).value"
+                            @change="
+                                query = ($event.target as HTMLInputElement)
+                                    .value
+                            "
                             @focus="query = ''"
                         />
-                        <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-3">
-                            <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                        <ComboboxButton
+                            class="absolute inset-y-0 right-0 flex items-center pr-3"
+                        >
+                            <svg
+                                class="h-4 w-4 text-slate-400"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                                />
                             </svg>
                         </ComboboxButton>
-                        <ComboboxOptions class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-slate-200 bg-white py-1 shadow-lg focus:outline-none">
-                            <ComboboxOption :value="null" v-slot="{ active, selected }">
+                        <ComboboxOptions
+                            class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-slate-200 bg-white py-1 shadow-lg focus:outline-none"
+                        >
+                            <ComboboxOption
+                                :value="null"
+                                v-slot="{ active, selected }"
+                            >
                                 <li
                                     :class="[
                                         'cursor-pointer px-3 py-2 text-sm italic',
-                                        active ? 'bg-sky-600 text-white' : 'text-slate-400',
-                                        selected ? 'font-semibold' : 'font-normal',
+                                        active
+                                            ? 'bg-sky-600 text-white'
+                                            : 'text-slate-400',
+                                        selected
+                                            ? 'font-semibold'
+                                            : 'font-normal',
                                     ]"
                                 >
                                     None
@@ -178,20 +245,32 @@ const resetFieldError = (field: string) => {
                                 <li
                                     :class="[
                                         'cursor-pointer px-3 py-2 text-sm',
-                                        active ? 'bg-sky-600 text-white' : 'text-slate-900',
-                                        selected ? 'font-semibold' : 'font-normal',
+                                        active
+                                            ? 'bg-sky-600 text-white'
+                                            : 'text-slate-900',
+                                        selected
+                                            ? 'font-semibold'
+                                            : 'font-normal',
                                     ]"
                                 >
                                     {{ product.name }}
                                 </li>
                             </ComboboxOption>
-                            <li v-if="query && filteredProducts.length === 0" class="px-3 py-2 text-sm text-slate-500">
+                            <li
+                                v-if="query && filteredProducts.length === 0"
+                                class="px-3 py-2 text-sm text-slate-500"
+                            >
                                 No products found.
                             </li>
                         </ComboboxOptions>
                     </div>
                 </Combobox>
-                <p v-if="page.props.errors?.product_id" class="mt-1 text-sm text-red-500">{{ page.props.errors.product_id }}</p>
+                <p
+                    v-if="page.props.errors?.product_id"
+                    class="mt-1 text-sm text-red-500"
+                >
+                    {{ page.props.errors.product_id }}
+                </p>
             </div>
 
             <input v-if="isEditMode" type="hidden" name="_method" value="PUT" />
