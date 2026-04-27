@@ -25,9 +25,9 @@ class SaleServiceFactory extends Factory
     public function definition(): array
     {
         return [
-            'service_id' => Service::factory()->create()->id,
-            'sale_id' => Sale::factory()->create()->id,
-            'price' => fake()->randomFloat(2, 10, 1000),
+            'service_id' => Service::factory(),
+            'sale_id' => Sale::factory(),
+            'price' => fake()->randomFloat(nbMaxDecimals: 2, min: 89, max: 499),
         ];
     }
 }

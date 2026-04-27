@@ -2,16 +2,20 @@
 
 namespace Database\Seeders;
 
-use Module\Sale\Infrastructure\Persistence\Eloquent\Models\Sale;
 use Illuminate\Database\Seeder;
+use Module\Client\Infrastructure\Persistence\Eloquent\Models\Client;
+use Module\Sale\Infrastructure\Persistence\Eloquent\Models\Sale;
 
 class SaleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        Sale::factory(10)->create();
+        $clientIds = Client::pluck('id')->toArray();
+
+        Sale::factory(20)
+            ->sequence(fn ($sequence) => [
+                'client_id' => fake()->randomElement($clientIds),
+            ])
+            ->create();
     }
 }

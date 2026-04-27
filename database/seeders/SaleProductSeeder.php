@@ -2,16 +2,31 @@
 
 namespace Database\Seeders;
 
-use Module\Sale\Infrastructure\Persistence\Eloquent\Models\SaleProduct;
 use Illuminate\Database\Seeder;
+use Module\Product\Infrastructure\Persistence\Eloquent\Models\Product;
+use Module\Sale\Infrastructure\Persistence\Eloquent\Models\Sale;
+use Module\Sale\Infrastructure\Persistence\Eloquent\Models\SaleProduct;
 
 class SaleProductSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        SaleProduct::factory(20)->create();
+        $sales = Sale::all();
+        $productIds = Product::pluck('id')->toArray();
+
+        foreach ($sales as $sale) {
+            $selectedProductIds = fake()->randomElements($productIds, rand(2, 4));
+
+            foreach ($selectedProductIds as $productId) {
+                $product = Product::find($productId);
+
+                SaleProduct::create([
+                    'sale_id' => $sale->id,
+                    'product_id' => $productId,
+                    'price' => $product->price,
+                    'quantity' => rand(1, 5),
+                ]);
+            }
+        }
     }
 }

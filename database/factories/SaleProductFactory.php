@@ -25,10 +25,10 @@ class SaleProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'product_id' => Product::factory()->create()->id,
-            'sale_id' => Sale::factory()->create()->id,
-            'price' => fake()->randomFloat(2, 10, 1000),
-            'quantity' => fake()->numberBetween(1, 10),
+            'product_id' => Product::factory(),
+            'sale_id' => Sale::factory(),
+            'price' => fake()->randomFloat(nbMaxDecimals: 2, min: 50, max: 5000),
+            'quantity' => fake()->numberBetween(1, 5),
         ];
     }
 }

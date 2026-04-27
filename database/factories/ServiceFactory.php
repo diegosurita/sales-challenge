@@ -22,10 +22,23 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
+        $catalog = [
+            ['name' => 'Hardware Installation & Setup', 'price' => 150.00],
+            ['name' => 'Network Configuration & Setup', 'price' => 299.00],
+            ['name' => 'On-site Technical Support (per hour)', 'price' => 120.00],
+            ['name' => 'Hardware Repair & Diagnostics', 'price' => 199.00],
+            ['name' => 'System Imaging & Deployment', 'price' => 179.00],
+            ['name' => 'Data Migration Service', 'price' => 299.00],
+            ['name' => 'Firewall Configuration & Tuning', 'price' => 349.00],
+            ['name' => 'Server Rack Installation', 'price' => 499.00],
+        ];
+
+        $service = fake()->randomElement($catalog);
+
         return [
-            'name' => fake()->words(asText: true, nb: 2),
-            'price' => fake()->randomFloat(nbMaxDecimals: 2, min: 1, max: 10000),
-            'available' => fake()->boolean(),
+            'name' => $service['name'],
+            'price' => $service['price'],
+            'available' => fake()->boolean(80),
             'product_id' => null,
         ];
     }

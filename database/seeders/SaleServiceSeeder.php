@@ -2,16 +2,36 @@
 
 namespace Database\Seeders;
 
-use Module\Sale\Infrastructure\Persistence\Eloquent\Models\SaleService;
 use Illuminate\Database\Seeder;
+use Module\Sale\Infrastructure\Persistence\Eloquent\Models\Sale;
+use Module\Sale\Infrastructure\Persistence\Eloquent\Models\SaleService;
+use Module\Service\Infrastructure\Persistence\Eloquent\Models\Service;
 
 class SaleServiceSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        SaleService::factory(10)->create();
+        $sales = Sale::all();
+        $serviceIds = Service::pluck('id')->toArray();
+
+        foreach ($sales as $sale) {
+            $serviceCount = rand(0, 2);
+
+            if ($serviceCount === 0) {
+                continue;
+            }
+
+            $selectedServiceIds = fake()->randomElements($serviceIds, $serviceCount);
+
+            foreach ($selectedServiceIds as $serviceId) {
+                $service = Service::find($serviceId);
+
+                SaleService::create([
+                    'sale_id' => $sale->id,
+                    'service_id' => $serviceId,
+                    'price' => $service->price,
+                ]);
+            }
+        }
     }
 }
