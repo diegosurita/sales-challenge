@@ -18,8 +18,10 @@ use Module\Sale\Core\Exceptions\ServiceNotAvailableException;
 use Module\Sale\Core\Exceptions\ServiceRequiredProductMissingFromSaleException;
 use Module\Sale\Core\Exceptions\ServiceRequiredProductOutOfStockException;
 use Module\Sale\Core\UseCases\CreateSaleUseCase;
+use Module\Sale\Core\UseCases\GetSaleByIDUseCase;
 use Module\Sale\Core\UseCases\GetSalesUseCase;
 use Module\Service\Core\UseCases\GetServicesUseCase;
+use Module\Shared\Core\Exceptions\NotFoundException;
 
 class SaleController extends Controller
 {
@@ -103,5 +105,18 @@ class SaleController extends Controller
         session()->flash('success', 'Sale created successfully.');
 
         return redirect()->route('sales.index');
+    }
+
+    public function show(int $id, GetSaleByIDUseCase $useCase): Response
+    {
+        try {
+            $sale = $useCase->execute(id: $id);
+        } catch (NotFoundException) {
+            abort(404);
+        }
+
+        return Inertia::render('Sale/SaleDetail', [
+            'sale' => $sale->toArray(),
+        ]);
     }
 }

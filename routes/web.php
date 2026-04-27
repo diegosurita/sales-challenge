@@ -19,7 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::inertia('/dashboard', 'Auth/Dashboard')->name('dashboard');
     Route::resource('/clients', ClientController::class)->except(['show']);
     Route::resource('/products', ProductController::class)->except(['show']);
-    Route::resource('/sales', SaleController::class)->except(['show']);
+    Route::resource('/sales', SaleController::class)->except(['edit', 'update', 'destroy']);
     Route::resource('/services', ServiceController::class)->except(['show']);
     Route::post('/auth/logout', [AuthenticationController::class, 'logout'])->name('logout');
 });

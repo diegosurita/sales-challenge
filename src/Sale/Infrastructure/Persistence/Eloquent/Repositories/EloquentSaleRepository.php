@@ -12,6 +12,7 @@ use Module\Sale\Core\Entities\SaleEntity;
 use Module\Sale\Infrastructure\Persistence\Eloquent\Models\Sale;
 use Module\Sale\Infrastructure\Persistence\Eloquent\Models\SaleProduct;
 use Module\Sale\Infrastructure\Persistence\Eloquent\Models\SaleService;
+use Module\Shared\Core\Exceptions\NotFoundException;
 
 class EloquentSaleRepository implements SaleRepositoryContract
 {
@@ -24,6 +25,47 @@ class EloquentSaleRepository implements SaleRepositoryContract
             createdAt: $sale->created_at->toImmutable(),
             updatedAt: $sale->updated_at->toImmutable(),
         ))->toArray();
+    }
+
+    public function getByID(int $id): SaleEntity
+    {
+        /** @var Sale|null $sale */
+        $sale = Sale::with(['client', 'saleProducts.product', 'saleServices.service'])->find($id);
+
+        if ($sale === null) {
+            throw new NotFoundException(model: 'Sale', id: $id);
+        }
+
+        $saleDate = $sale->created_at->toDateString();
+
+        $clientDailyPurchaseNumber = Sale::where('client_id', $sale->client_id)
+            ->whereDate('created_at', $saleDate)
+            ->where('id', '<=', $sale->id)
+            ->count();
+
+        $products = $sale->saleProducts->map(fn (SaleProduct $saleProduct) => [
+            'product_id' => $saleProduct->product_id,
+            'name' => $saleProduct->product->name,
+            'price' => $saleProduct->price,
+            'quantity' => $saleProduct->quantity,
+        ])->toArray();
+
+        $services = $sale->saleServices->map(fn (SaleService $saleService) => [
+            'service_id' => $saleService->service_id,
+            'name' => $saleService->service->name,
+            'price' => $saleService->price,
+        ])->toArray();
+
+        return new SaleEntity(
+            id: $sale->id,
+            clientId: $sale->client_id,
+            clientName: $sale->client->name,
+            createdAt: $sale->created_at->toImmutable(),
+            updatedAt: $sale->updated_at->toImmutable(),
+            products: $products,
+            services: $services,
+            clientDailyPurchaseNumber: $clientDailyPurchaseNumber,
+        );
     }
 
     /**

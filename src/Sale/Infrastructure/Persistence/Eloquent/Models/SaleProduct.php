@@ -16,6 +16,11 @@ class SaleProduct extends Model
     /** @use HasFactory<SaleProductFactory> */
     use HasFactory;
 
+    protected $casts = [
+        'price' => 'float',
+        'quantity' => 'integer',
+    ];
+
     /**
      * Get a new factory instance for the model.
      */

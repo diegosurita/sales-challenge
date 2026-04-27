@@ -13,6 +13,8 @@ interface SaleRepositoryContract
      */
     public function getAll(): array;
 
+    public function getByID(int $id): SaleEntity;
+
     /**
      * @param  SaleCreateProductItemDTO[]  $products
      * @param  SaleCreateServiceItemDTO[]  $services

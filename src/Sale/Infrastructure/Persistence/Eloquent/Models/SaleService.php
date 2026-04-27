@@ -11,10 +11,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Module\Service\Infrastructure\Persistence\Eloquent\Models\Service;
 
 #[Fillable(['service_id', 'sale_id', 'price'])]
+
 class SaleService extends Model
 {
     /** @use HasFactory<SaleServiceFactory> */
     use HasFactory;
+
+    protected $casts = [
+        'price' => 'float',
+    ];
 
     /**
      * Get a new factory instance for the model.
