@@ -2,6 +2,7 @@
 
 namespace Module\Sale\Infrastructure\Persistence\Eloquent\Repositories;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use Module\Product\Infrastructure\Persistence\Eloquent\Models\Product;
 use Module\Product\Infrastructure\Persistence\Eloquent\Models\ProductStockLedger;
@@ -129,5 +130,75 @@ class EloquentSaleRepository implements SaleRepositoryContract
             ->pluck('sales.client_id')
             ->map(fn ($id) => (int) $id)
             ->toArray();
+    }
+
+    public function getCurrentMonthRevenue(): float
+    {
+        $now = CarbonImmutable::now();
+
+        $productRevenue = SaleProduct::query()
+            ->join('sales', 'sale_products.sale_id', '=', 'sales.id')
+            ->whereYear('sales.created_at', $now->year)
+            ->whereMonth('sales.created_at', $now->month)
+            ->sum(DB::raw('sale_products.price * sale_products.quantity'));
+
+        $serviceRevenue = SaleService::query()
+            ->join('sales', 'sale_services.sale_id', '=', 'sales.id')
+            ->whereYear('sales.created_at', $now->year)
+            ->whereMonth('sales.created_at', $now->month)
+            ->sum('sale_services.price');
+
+        return (float) $productRevenue + (float) $serviceRevenue;
+    }
+
+    /**
+     * @return array<int, array{month: string, revenue: float}>
+     */
+    public function getMonthlyRevenueLast12Months(): array
+    {
+        $now = CarbonImmutable::now();
+        $startDate = $now->startOfMonth()->subMonths(11);
+
+        $productRevenues = SaleProduct::query()
+            ->join('sales', 'sale_products.sale_id', '=', 'sales.id')
+            ->where('sales.created_at', '>=', $startDate)
+            ->select([
+                DB::raw('EXTRACT(YEAR FROM sales.created_at) as year'),
+                DB::raw('EXTRACT(MONTH FROM sales.created_at) as month_number'),
+                DB::raw('SUM(sale_products.price * sale_products.quantity) as total'),
+            ])
+            ->groupBy(DB::raw('EXTRACT(YEAR FROM sales.created_at)'), DB::raw('EXTRACT(MONTH FROM sales.created_at)'))
+            ->get()
+            ->keyBy(fn ($row) => (int) $row->year.'-'.(int) $row->month_number);
+
+        $serviceRevenues = SaleService::query()
+            ->join('sales', 'sale_services.sale_id', '=', 'sales.id')
+            ->where('sales.created_at', '>=', $startDate)
+            ->select([
+                DB::raw('EXTRACT(YEAR FROM sales.created_at) as year'),
+                DB::raw('EXTRACT(MONTH FROM sales.created_at) as month_number'),
+                DB::raw('SUM(sale_services.price) as total'),
+            ])
+            ->groupBy(DB::raw('EXTRACT(YEAR FROM sales.created_at)'), DB::raw('EXTRACT(MONTH FROM sales.created_at)'))
+            ->get()
+            ->keyBy(fn ($row) => (int) $row->year.'-'.(int) $row->month_number);
+
+        $result = [];
+
+        for ($monthOffset = 11; $monthOffset >= 0; $monthOffset--) {
+            $date = $now->startOfMonth()->subMonths($monthOffset);
+            $key = $date->year.'-'.$date->month;
+            $monthLabel = $date->format('M Y');
+
+            $productTotal = isset($productRevenues[$key]) ? (float) $productRevenues[$key]->total : 0.0;
+            $serviceTotal = isset($serviceRevenues[$key]) ? (float) $serviceRevenues[$key]->total : 0.0;
+
+            $result[] = [
+                'month' => $monthLabel,
+                'revenue' => $productTotal + $serviceTotal,
+            ];
+        }
+
+        return $result;
     }
 }

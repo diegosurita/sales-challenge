@@ -25,4 +25,12 @@ interface SaleRepositoryContract
      * @return int[]
      */
     public function getDistinctClientIdsForProductToday(int $productId): array;
+
+    public function getCurrentMonthRevenue(): float;
+
+    /**
+     * @return array<int, array{month: string, revenue: float}>
+     */
+    public function getMonthlyRevenueLast12Months(): array;
+
 }

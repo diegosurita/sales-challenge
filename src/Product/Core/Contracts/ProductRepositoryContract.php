@@ -25,4 +25,9 @@ interface ProductRepositoryContract
     public function updateProduct(ProductFormDTO $dto): void;
 
     public function delete(int $id): void;
+
+    /**
+     * @return array<int, array{name: string, total_sold: int}>
+     */
+    public function getTopSellingProducts(int $limit): array;
 }

@@ -2,7 +2,9 @@
 
 namespace Module\Service\Infrastructure\Persistence\Eloquent\Repositories;
 
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use Module\Sale\Infrastructure\Persistence\Eloquent\Models\SaleService;
 use Module\Service\Core\Contracts\ServiceRepositoryContract;
 use Module\Service\Core\DTOs\ServiceFormDTO;
 use Module\Service\Core\Entities\ProductEntity;
@@ -98,5 +100,27 @@ class EloquentServiceRepository implements ServiceRepositoryContract
         }
 
         $service->delete();
+    }
+
+    /**
+     * @return array<int, array{name: string, total_sold: int}>
+     */
+    public function getTopSellingServices(int $limit): array
+    {
+        return SaleService::query()
+            ->join('services', 'sale_services.service_id', '=', 'services.id')
+            ->select([
+                'services.name',
+                DB::raw('COUNT(sale_services.id) as total_sold'),
+            ])
+            ->groupBy('services.id', 'services.name')
+            ->orderByDesc('total_sold')
+            ->limit($limit)
+            ->get()
+            ->map(fn ($row) => [
+                'name' => $row->name,
+                'total_sold' => (int) $row->total_sold,
+            ])
+            ->toArray();
     }
 }

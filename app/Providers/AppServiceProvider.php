@@ -13,17 +13,21 @@ use Module\Client\Core\Contracts\ClientRepositoryContract;
 use Module\Client\Infrastructure\Persistence\Eloquent\Repositories\EloquentClientRepository;
 use Module\Product\Core\Contracts\ProductRepositoryContract;
 use Module\Product\Core\Contracts\ProductStockLedgerRepositoryContract;
+use Module\Product\Infrastructure\Gateways\ProductModuleGateway;
 use Module\Product\Infrastructure\Gateways\ProductQueryGateway;
 use Module\Product\Infrastructure\Persistence\Eloquent\Repositories\EloquentProductRepository;
 use Module\Product\Infrastructure\Persistence\Eloquent\Repositories\EloquentProductStockLedgerRepository;
 use Module\Sale\Core\Contracts\SaleRepositoryContract;
-use Module\Sale\Infrastructure\Gateways\DashboardQueryGateway;
+use Module\Sale\Infrastructure\Gateways\SaleModuleGateway;
 use Module\Sale\Infrastructure\Persistence\Eloquent\Repositories\EloquentSaleRepository;
 use Module\Service\Core\Contracts\ServiceRepositoryContract;
+use Module\Service\Infrastructure\Gateways\ServiceModuleGateway;
 use Module\Service\Infrastructure\Gateways\ServiceQueryGateway;
 use Module\Service\Infrastructure\Persistence\Eloquent\Repositories\EloquentServiceRepository;
-use Module\Shared\Core\Contracts\DashboardQueryServiceContract;
+use Module\Shared\Core\Contracts\ProductModuleGatewayContract;
 use Module\Shared\Core\Contracts\ProductQueryServiceContract;
+use Module\Shared\Core\Contracts\SaleModuleGatewayContract;
+use Module\Shared\Core\Contracts\ServiceModuleGatewayContract;
 use Module\Shared\Core\Contracts\ServiceQueryServiceContract;
 
 class AppServiceProvider extends ServiceProvider
@@ -74,8 +78,18 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            DashboardQueryServiceContract::class,
-            DashboardQueryGateway::class,
+            SaleModuleGatewayContract::class,
+            SaleModuleGateway::class,
+        );
+
+        $this->app->bind(
+            ProductModuleGatewayContract::class,
+            ProductModuleGateway::class,
+        );
+
+        $this->app->bind(
+            ServiceModuleGatewayContract::class,
+            ServiceModuleGateway::class,
         );
     }
 

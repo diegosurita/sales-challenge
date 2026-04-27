@@ -3,13 +3,17 @@
 namespace Module\Shared\Core\UseCases;
 
 use Illuminate\Support\Facades\Concurrency;
-use Module\Shared\Core\Contracts\DashboardQueryServiceContract;
+use Module\Shared\Core\Contracts\ProductModuleGatewayContract;
+use Module\Shared\Core\Contracts\SaleModuleGatewayContract;
+use Module\Shared\Core\Contracts\ServiceModuleGatewayContract;
 use Module\Shared\Core\DTOs\DashboardDataDTO;
 
 class GetDashboardDataUseCase
 {
     public function __construct(
-        private readonly DashboardQueryServiceContract $dashboardQueryService,
+        private readonly SaleModuleGatewayContract $saleModuleGateway,
+        private readonly ProductModuleGatewayContract $productModuleGateway,
+        private readonly ServiceModuleGatewayContract $serviceModuleGateway,
     ) {}
 
     public function execute(): DashboardDataDTO
@@ -20,10 +24,10 @@ class GetDashboardDataUseCase
             $topProducts,
             $topServices,
         ] = Concurrency::run([
-            fn () => $this->dashboardQueryService->getCurrentMonthRevenue(),
-            fn () => $this->dashboardQueryService->getMonthlyRevenueLast12Months(),
-            fn () => $this->dashboardQueryService->getTopSellingProducts(limit: 5),
-            fn () => $this->dashboardQueryService->getTopSellingServices(limit: 5),
+            fn () => $this->saleModuleGateway->getCurrentMonthRevenue(),
+            fn () => $this->saleModuleGateway->getMonthlyRevenueLast12Months(),
+            fn () => $this->productModuleGateway->getTopSellingProducts(limit: 5),
+            fn () => $this->serviceModuleGateway->getTopSellingServices(limit: 5),
         ]);
 
         return new DashboardDataDTO(

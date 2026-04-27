@@ -2,11 +2,13 @@
 
 namespace Module\Product\Infrastructure\Persistence\Eloquent\Repositories;
 
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Module\Product\Core\Contracts\ProductRepositoryContract;
 use Module\Product\Core\DTOs\ProductFormDTO;
 use Module\Product\Core\Entities\ProductEntity;
 use Module\Product\Infrastructure\Persistence\Eloquent\Models\Product;
+use Module\Sale\Infrastructure\Persistence\Eloquent\Models\SaleProduct;
 use Module\Shared\Core\Exceptions\NotFoundException;
 
 class EloquentProductRepository implements ProductRepositoryContract
@@ -90,5 +92,27 @@ class EloquentProductRepository implements ProductRepositoryContract
         }
 
         $product->delete();
+    }
+
+    /**
+     * @return array<int, array{name: string, total_sold: int}>
+     */
+    public function getTopSellingProducts(int $limit): array
+    {
+        return SaleProduct::query()
+            ->join('products', 'sale_products.product_id', '=', 'products.id')
+            ->select([
+                'products.name',
+                DB::raw('SUM(sale_products.quantity) as total_sold'),
+            ])
+            ->groupBy('products.id', 'products.name')
+            ->orderByDesc('total_sold')
+            ->limit($limit)
+            ->get()
+            ->map(fn ($row) => [
+                'name' => $row->name,
+                'total_sold' => (int) $row->total_sold,
+            ])
+            ->toArray();
     }
 }

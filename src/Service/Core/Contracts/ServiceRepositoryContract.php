@@ -25,4 +25,9 @@ interface ServiceRepositoryContract
     public function updateService(ServiceFormDTO $dto): void;
 
     public function delete(int $id): void;
+
+    /**
+     * @return array<int, array{name: string, total_sold: int}>
+     */
+    public function getTopSellingServices(int $limit): array;
 }
