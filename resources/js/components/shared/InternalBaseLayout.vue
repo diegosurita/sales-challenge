@@ -15,7 +15,7 @@ defineProps<{
             <div class="flex min-h-screen flex-col">
                 <TopMenuBar :title="title" />
 
-                <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-4">
+                <main class="mx-auto w-full flex-1 px-4 py-4">
                     <div class="rounded-lg border border-slate-200 bg-white p-4 shadow-2xs sm:p-4">
                         <slot />
                     </div>
