@@ -8,6 +8,7 @@ final class ProductFormDTO
         public readonly string $name,
         public readonly float $price,
         public readonly ?int $id = null,
+        public readonly ?int $stockCount = null,
     ) {
     }
 }

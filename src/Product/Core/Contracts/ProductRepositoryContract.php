@@ -12,7 +12,7 @@ interface ProductRepositoryContract
      */
     public function getAll(): array;
 
-    public function createProduct(ProductFormDTO $dto): void;
+    public function createProduct(ProductFormDTO $dto): int;
 
     public function getByID(int $id): ProductEntity;
 
@@ -23,6 +23,8 @@ interface ProductRepositoryContract
     public function getManyByIDs(array $ids): array;
 
     public function updateProduct(ProductFormDTO $dto): void;
+
+    public function updateStockCount(int $productId, int $stockCount): void;
 
     public function delete(int $id): void;
 

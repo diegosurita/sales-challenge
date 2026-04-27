@@ -23,12 +23,8 @@ class SaleFactory extends Factory
      */
     public function definition(): array
     {
-        $createdAt = fake()->dateTimeBetween('-12 months', 'now');
-
         return [
             'client_id' => Client::factory(),
-            'created_at' => $createdAt,
-            'updated_at' => $createdAt,
         ];
     }
 }

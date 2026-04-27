@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Module\Product\Core\Enums\StockLedgerReason;
 use Module\Product\Infrastructure\Persistence\Eloquent\Models\Product;
+use Module\Product\Infrastructure\Persistence\Eloquent\Models\ProductStockLedger;
 
 class ProductSeeder extends Seeder
 {
@@ -37,15 +39,14 @@ class ProductSeeder extends Seeder
             ['name' => 'TP-Link 8-Port Gigabit Unmanaged Switch', 'price' => 29.00, 'stock_count' => 0],
         ];
 
-        $now = now();
-        Product::insert(
-            array_map(
-                fn (array $product) => array_merge($product, [
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]),
-                $products
-            )
-        );
+        foreach ($products as $productData) {
+            $product = Product::create($productData);
+
+            ProductStockLedger::create([
+                'product_id' => $product->id,
+                'reason' => StockLedgerReason::OPENING_BALANCE->value,
+                'quantity' => $productData['stock_count'],
+            ]);
+        }
     }
 }

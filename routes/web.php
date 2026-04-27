@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/clients', ClientController::class)->except(['show']);
     Route::resource('/products', ProductController::class)->except(['show']);
+    Route::post('/products/{product}/stock-ledger', [ProductController::class, 'storeStockLedger'])->name('products.stockLedger.store');
     Route::resource('/sales', SaleController::class)->except(['edit', 'update', 'destroy']);
     Route::resource('/services', ServiceController::class)->except(['show']);
     Route::post('/auth/logout', [AuthenticationController::class, 'logout'])->name('logout');

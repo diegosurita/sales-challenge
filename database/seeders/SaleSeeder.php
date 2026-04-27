@@ -15,6 +15,7 @@ class SaleSeeder extends Seeder
         Sale::factory(20)
             ->sequence(fn ($sequence) => [
                 'client_id' => fake()->randomElement($clientIds),
+                'created_at' => fake()->dateTimeBetween('-12 months', 'now'),
             ])
             ->create();
     }

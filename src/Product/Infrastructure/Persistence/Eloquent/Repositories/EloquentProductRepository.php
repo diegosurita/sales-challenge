@@ -23,12 +23,14 @@ class EloquentProductRepository implements ProductRepositoryContract
         ))->toArray();
     }
 
-    public function createProduct(ProductFormDTO $dto): void
+    public function createProduct(ProductFormDTO $dto): int
     {
-        Product::create([
+        $product = Product::create([
             'name' => $dto->name,
             'price' => $dto->price,
         ]);
+
+        return (int) $product->id;
     }
 
     public function getByID(int $id): ProductEntity
@@ -81,6 +83,17 @@ class EloquentProductRepository implements ProductRepositoryContract
             'name' => $dto->name,
             'price' => $dto->price,
         ]);
+    }
+
+    public function updateStockCount(int $productId, int $stockCount): void
+    {
+        $product = Product::find($productId);
+
+        if (! $product) {
+            throw new NotFoundException('Product', $productId);
+        }
+
+        $product->update(['stock_count' => $stockCount]);
     }
 
     public function delete(int $id): void
