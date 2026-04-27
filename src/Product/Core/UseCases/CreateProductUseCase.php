@@ -12,14 +12,13 @@ class CreateProductUseCase
     public function __construct(
         private readonly ProductRepositoryContract $productRepository,
         private readonly RegisterProductStockUseCase $registerProductStockUseCase,
-    ) {
-    }
+    ) {}
 
     public function execute(ProductFormDTO $dto): void
     {
         $productId = $this->productRepository->createProduct($dto);
 
-        if ($dto->stockCount !== null) {
+        if ($dto->stockCount > 0) {
             $this->registerProductStockUseCase->execute(new RegisterStockDTO(
                 productId: $productId,
                 reason: StockLedgerReason::OPENING_BALANCE,

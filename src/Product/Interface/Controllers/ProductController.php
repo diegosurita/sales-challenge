@@ -11,8 +11,8 @@ use Module\Product\Core\Enums\StockLedgerReason;
 use Module\Product\Core\UseCases\CreateProductUseCase;
 use Module\Product\Core\UseCases\DeleteProductUseCase;
 use Module\Product\Core\UseCases\GetProductByIDUseCase;
-use Module\Product\Core\UseCases\GetProductsUseCase;
 use Module\Product\Core\UseCases\GetProductStockLedgerEntriesUseCase;
+use Module\Product\Core\UseCases\GetProductsUseCase;
 use Module\Product\Core\UseCases\RegisterProductStockUseCase;
 use Module\Product\Core\UseCases\UpdateProductUseCase;
 use Module\Shared\Core\Exceptions\NotFoundException;
@@ -54,13 +54,13 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'stock_count' => 'nullable|integer|min:0',
+            'stock_count' => 'integer|min:0',
         ]);
 
         $dto = new ProductFormDTO(
             name: $request->name,
             price: (float) $request->price,
-            stockCount: $request->stock_count !== null ? (int) $request->stock_count : null,
+            stockCount: (int) ($request->stock_count ?? 0),
         );
 
         $useCase->execute($dto);
@@ -105,7 +105,7 @@ class ProductController extends Controller
     {
         try {
             $request->validate([
-                'reason' => ['required', 'string', 'in:' . implode(',', array_column(StockLedgerReason::cases(), 'value'))],
+                'reason' => ['required', 'string', 'in:'.implode(',', array_column(StockLedgerReason::cases(), 'value'))],
                 'quantity' => 'required|integer|not_in:0',
             ]);
 

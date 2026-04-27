@@ -19,7 +19,7 @@ class EloquentProductRepository implements ProductRepositoryContract
             id: $product->id,
             name: $product->name,
             price: (float) $product->price,
-            stockCount: $product->stock_count !== null ? (int) $product->stock_count : null,
+            stockCount: (int) $product->stock_count,
         ))->toArray();
     }
 
@@ -45,7 +45,7 @@ class EloquentProductRepository implements ProductRepositoryContract
             id: $product->id,
             name: $product->name,
             price: (float) $product->price,
-            stockCount: $product->stock_count !== null ? (int) $product->stock_count : null,
+            stockCount: (int) $product->stock_count,
         );
     }
 
@@ -62,7 +62,7 @@ class EloquentProductRepository implements ProductRepositoryContract
                 id: $product->id,
                 name: $product->name,
                 price: (float) $product->price,
-                stockCount: $product->stock_count !== null ? (int) $product->stock_count : null,
+                stockCount: (int) $product->stock_count,
             ))
             ->toArray();
     }

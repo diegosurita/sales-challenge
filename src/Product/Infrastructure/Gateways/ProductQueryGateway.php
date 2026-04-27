@@ -28,7 +28,7 @@ class ProductQueryGateway implements ProductQueryServiceContract
     }
 
     /**
-     * @return array{id: int, name: string, price: float, stock_count: int|null}|null
+     * @return array{id: int, name: string, price: float, stock_count: int}|null
      */
     public function getProductInfo(int $productId): ?array
     {
@@ -41,7 +41,7 @@ class ProductQueryGateway implements ProductQueryServiceContract
 
     /**
      * @param  int[]  $ids
-     * @return array<int, array{id: int, name: string, price: float, stock_count: int|null}>
+     * @return array<int, array{id: int, name: string, price: float, stock_count: int}>
      */
     public function getProductsInfo(array $ids): array
     {

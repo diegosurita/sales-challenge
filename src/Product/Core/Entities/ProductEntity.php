@@ -8,9 +8,8 @@ final class ProductEntity
         private readonly int $id,
         private readonly string $name,
         private readonly float $price,
-        private ?int $stockCount = null,
-    ) {
-    }
+        private int $stockCount = 0,
+    ) {}
 
     public function getId(): int
     {
@@ -27,7 +26,7 @@ final class ProductEntity
         return $this->price;
     }
 
-    public function getStockCount(): ?int
+    public function getStockCount(): int
     {
         return $this->stockCount;
     }
@@ -35,6 +34,7 @@ final class ProductEntity
     public function setCount(int $count): self
     {
         $this->stockCount = $count;
+
         return $this;
     }
 

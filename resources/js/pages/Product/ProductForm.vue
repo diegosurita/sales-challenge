@@ -16,7 +16,7 @@ interface StockLedgerEntry {
 }
 
 interface Props {
-    product?: { id: number; name: string; price: number; stock_count: number | null };
+    product?: { id: number; name: string; price: number; stock_count: number };
     stockLedgerEntries?: StockLedgerEntry[];
 }
 
@@ -31,7 +31,7 @@ const isEditMode = computed(() => !!props.product);
 const form = reactive({
     name: props.product?.name || '',
     price: props.product?.price?.toString() || '',
-    stockCount: props.product?.stock_count?.toString() ?? '',
+    stockCount: props.product?.stock_count.toString() ?? '',
 });
 
 const isRegisterStockModalOpen = ref(false);
@@ -169,7 +169,7 @@ const stockLedgerGridOptions: GridOptions<StockLedgerEntry> = {
                 </label>
                 <input
                     id="stock-count"
-                    :value="props.product!.stock_count ?? 0"
+                    :value="props.product!.stock_count"
                     type="number"
                     class="mt-1 block w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-slate-500 outline-none"
                     readonly
