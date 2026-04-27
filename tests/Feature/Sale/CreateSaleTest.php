@@ -172,10 +172,10 @@ it('should allow a product sold to 3 clients when client is one of them', functi
     $response->assertRedirect(route('sales.index'));
 });
 
-it('should reject a service whose required product is out of stock', function () {
+it('should reject a service whose required product is missing from the sale', function () {
     $user = User::factory()->create();
     $client = Client::factory()->create();
-    $product = Product::factory()->create(['stock_count' => 0, 'name' => 'Required Product']);
+    $product = Product::factory()->create(['stock_count' => 5, 'name' => 'Required Product']);
     $service = Service::factory()->create(['available' => true, 'product_id' => $product->id, 'name' => 'Dependent Service']);
 
     $response = actingAs($user)->post(route('sales.store'), [
@@ -187,6 +187,21 @@ it('should reject a service whose required product is out of stock', function ()
     $response->assertSessionHasErrors('services');
 });
 
+it('should reject a service whose required product is out of stock', function () {
+    $user = User::factory()->create();
+    $client = Client::factory()->create();
+    $product = Product::factory()->create(['stock_count' => 0, 'name' => 'Required Product']);
+    $service = Service::factory()->create(['available' => true, 'product_id' => $product->id, 'name' => 'Dependent Service']);
+
+    $response = actingAs($user)->post(route('sales.store'), [
+        'client_id' => $client->id,
+        'products' => [['product_id' => $product->id]],
+        'services' => [['service_id' => $service->id]],
+    ]);
+
+    $response->assertSessionHasErrors('products');
+});
+
 it('should allow a service whose required product has positive stock', function () {
     $user = User::factory()->create();
     $client = Client::factory()->create();
@@ -195,7 +210,7 @@ it('should allow a service whose required product has positive stock', function 
 
     $response = actingAs($user)->post(route('sales.store'), [
         'client_id' => $client->id,
-        'products' => [],
+        'products' => [['product_id' => $product->id]],
         'services' => [['service_id' => $service->id]],
     ]);
 

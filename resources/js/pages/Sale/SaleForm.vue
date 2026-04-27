@@ -21,6 +21,7 @@ interface Service {
     name: string;
     price: number;
     available: boolean;
+    product?: { id: number; name: string } | null;
 }
 
 const props = defineProps<{
@@ -38,6 +39,7 @@ const form = useForm({
 const selectedClient = ref<Client | null>(null);
 const selectedProduct = ref<Product | null>(null);
 const selectedService = ref<Service | null>(null);
+const serviceProductError = ref<string | null>(null);
 
 watch(selectedClient, (client) => {
     form.client_id = client?.id ?? null;
@@ -47,11 +49,15 @@ const clientQuery = ref('');
 const productQuery = ref('');
 const serviceQuery = ref('');
 
-const addedProductIds = computed(() => new Set(form.products.map((p) => p.product_id)));
-const addedServiceIds = computed(() => new Set(form.services.map((s) => s.service_id)));
+watch(serviceQuery, () => {
+    serviceProductError.value = null;
+});
 
-const availableProducts = computed(() => props.products.filter((p) => !addedProductIds.value.has(p.id)));
-const availableServices = computed(() => props.services.filter((s) => !addedServiceIds.value.has(s.id)));
+const addedProductIds = computed(() => new Set(form.products.map((product) => product.product_id)));
+const addedServiceIds = computed(() => new Set(form.services.map((service) => service.service_id)));
+
+const availableProducts = computed(() => props.products.filter((product) => !addedProductIds.value.has(product.id)));
+const availableServices = computed(() => props.services.filter((service) => !addedServiceIds.value.has(service.id)));
 
 const filteredClients = computed(() =>
     clientQuery.value === ''
@@ -62,25 +68,25 @@ const filteredClients = computed(() =>
 const filteredAvailableProducts = computed(() =>
     productQuery.value === ''
         ? availableProducts.value
-        : availableProducts.value.filter((p) => p.name.toLowerCase().includes(productQuery.value.toLowerCase())),
+        : availableProducts.value.filter((product) => product.name.toLowerCase().includes(productQuery.value.toLowerCase())),
 );
 
 const filteredAvailableServices = computed(() =>
     serviceQuery.value === ''
         ? availableServices.value
-        : availableServices.value.filter((s) => s.name.toLowerCase().includes(serviceQuery.value.toLowerCase())),
+        : availableServices.value.filter((service) => service.name.toLowerCase().includes(serviceQuery.value.toLowerCase())),
 );
 
 const addedProducts = computed(() =>
     form.products
         .map((fp) => props.products.find((p) => p.id === fp.product_id))
-        .filter((p): p is Product => p !== undefined),
+        .filter((product): product is Product => product !== undefined),
 );
 
 const addedServices = computed(() =>
     form.services
         .map((fs) => props.services.find((s) => s.id === fs.service_id))
-        .filter((s): s is Service => s !== undefined),
+        .filter((service): service is Service => service !== undefined),
 );
 
 const addProduct = () => {
@@ -98,7 +104,7 @@ const addProduct = () => {
 };
 
 const removeProduct = (productId: number) => {
-    form.products = form.products.filter((p) => p.product_id !== productId);
+    form.products = form.products.filter((product) => product.product_id !== productId);
 };
 
 const addService = () => {
@@ -110,21 +116,37 @@ const addService = () => {
         return;
     }
 
+    serviceProductError.value = null;
+
+    const requiredProduct = selectedService.value.product ?? null;
+
+    if (requiredProduct !== null && !addedProductIds.value.has(requiredProduct.id)) {
+        const inStock = props.products.find((product) => product.id === requiredProduct.id);
+
+        if (!inStock) {
+            serviceProductError.value = `Service "${selectedService.value.name}" requires "${requiredProduct.name}" which is out of stock.`;
+
+            return;
+        }
+
+        form.products.push({ product_id: requiredProduct.id });
+    }
+
     form.services.push({ service_id: selectedService.value.id });
     selectedService.value = null;
     serviceQuery.value = '';
 };
 
 const removeService = (serviceId: number) => {
-    form.services = form.services.filter((s) => s.service_id !== serviceId);
+    form.services = form.services.filter((service) => service.service_id !== serviceId);
 };
 
 const productSubtotal = computed(() =>
-    addedProducts.value.reduce((sum, p) => sum + p.price, 0),
+    addedProducts.value.reduce((sum, product) => sum + product.price, 0),
 );
 
 const serviceSubtotal = computed(() =>
-    addedServices.value.reduce((sum, s) => sum + s.price, 0),
+    addedServices.value.reduce((sum, service) => sum + service.price, 0),
 );
 
 const total = computed(() => productSubtotal.value + serviceSubtotal.value);
@@ -321,6 +343,10 @@ const submit = () => {
                         Add
                     </button>
                 </div>
+
+                <p v-if="serviceProductError" class="mt-2 text-sm text-red-600">
+                    {{ serviceProductError }}
+                </p>
 
                 <div v-if="addedServices.length > 0" class="mt-3 overflow-hidden rounded-lg border border-slate-200">
                     <table class="w-full text-sm">

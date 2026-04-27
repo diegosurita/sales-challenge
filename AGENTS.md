@@ -2,6 +2,7 @@
 
 - All commands (JavaScript or PHP) should be executed in the docker compose service `larave.test`.
 - When there is a need for documentation access, use the Context7 tool to check for documentation and code style guidelines.
+- When creating variables or params do not use abbreviations, always use descriptive names following clean code principles.
 
 # Backend Architecture and Code Style Guidelines
 

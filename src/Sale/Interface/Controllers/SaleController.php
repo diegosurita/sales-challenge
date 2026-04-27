@@ -15,6 +15,7 @@ use Module\Sale\Core\DTOs\SaleFormServiceItemDTO;
 use Module\Sale\Core\Exceptions\InsufficientStockException;
 use Module\Sale\Core\Exceptions\ProductClientLimitExceededException;
 use Module\Sale\Core\Exceptions\ServiceNotAvailableException;
+use Module\Sale\Core\Exceptions\ServiceRequiredProductMissingFromSaleException;
 use Module\Sale\Core\Exceptions\ServiceRequiredProductOutOfStockException;
 use Module\Sale\Core\UseCases\CreateSaleUseCase;
 use Module\Sale\Core\UseCases\GetSalesUseCase;
@@ -92,6 +93,8 @@ class SaleController extends Controller
         } catch (ProductClientLimitExceededException $e) {
             return back()->withErrors(['products' => $e->getMessage()])->withInput();
         } catch (ServiceNotAvailableException $e) {
+            return back()->withErrors(['services' => $e->getMessage()])->withInput();
+        } catch (ServiceRequiredProductMissingFromSaleException $e) {
             return back()->withErrors(['services' => $e->getMessage()])->withInput();
         } catch (ServiceRequiredProductOutOfStockException $e) {
             return back()->withErrors(['services' => $e->getMessage()])->withInput();

@@ -11,6 +11,7 @@ use Module\Sale\Core\DTOs\SaleFormServiceItemDTO;
 use Module\Sale\Core\Exceptions\InsufficientStockException;
 use Module\Sale\Core\Exceptions\ProductClientLimitExceededException;
 use Module\Sale\Core\Exceptions\ServiceNotAvailableException;
+use Module\Sale\Core\Exceptions\ServiceRequiredProductMissingFromSaleException;
 use Module\Sale\Core\Exceptions\ServiceRequiredProductOutOfStockException;
 use Module\Shared\Core\Contracts\ProductQueryServiceContract;
 use Module\Shared\Core\Contracts\ServiceQueryServiceContract;
@@ -27,12 +28,13 @@ class CreateSaleUseCase
      * @throws InsufficientStockException
      * @throws ProductClientLimitExceededException
      * @throws ServiceNotAvailableException
+     * @throws ServiceRequiredProductMissingFromSaleException
      * @throws ServiceRequiredProductOutOfStockException
      */
     public function execute(SaleFormDTO $dto): void
     {
         $productItems = $this->resolveProducts(clientId: $dto->clientId, products: $dto->products);
-        $serviceItems = $this->resolveServices(services: $dto->services);
+        $serviceItems = $this->resolveServices(products: $dto->products, services: $dto->services);
 
         $this->saleRepository->createSale(
             clientId: $dto->clientId,
@@ -88,14 +90,17 @@ class CreateSaleUseCase
     }
 
     /**
+     * @param  SaleFormProductItemDTO[]  $products
      * @param  SaleFormServiceItemDTO[]  $services
      * @return SaleCreateServiceItemDTO[]
      *
      * @throws ServiceNotAvailableException
+     * @throws ServiceRequiredProductMissingFromSaleException
      * @throws ServiceRequiredProductOutOfStockException
      */
-    private function resolveServices(array $services): array
+    private function resolveServices(array $products, array $services): array
     {
+        $saleProductIds = array_map(fn (SaleFormProductItemDTO $product) => $product->productId, $products);
         if ($services === []) {
             return [];
         }
@@ -130,7 +135,16 @@ class CreateSaleUseCase
             }
 
             if (isset($info['product'])) {
-                $depProduct = $depProductInfos[$info['product']['id']] ?? null;
+                $requiredProductId = $info['product']['id'];
+
+                if (!in_array($requiredProductId, $saleProductIds, strict: true)) {
+                    throw new ServiceRequiredProductMissingFromSaleException(
+                        serviceName: $info['name'],
+                        productName: $info['product']['name'],
+                    );
+                }
+
+                $depProduct = $depProductInfos[$requiredProductId] ?? null;
                 $stockCount = $depProduct['stock_count'] ?? 0;
 
                 if ($stockCount < 1) {
