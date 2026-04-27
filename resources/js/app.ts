@@ -1,4 +1,7 @@
 import { createInertiaApp } from '@inertiajs/vue3';
+import { AllCommunityModule, ModuleRegistry } from 'ag-charts-community';
+
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

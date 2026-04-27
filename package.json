@@ -35,6 +35,8 @@
         "@tailwindcss/vite": "^4.1.11",
         "@vitejs/plugin-vue": "^6.0.0",
         "@vueuse/core": "^12.8.2",
+        "ag-charts-community": "^13.2.1",
+        "ag-charts-vue3": "^13.2.1",
         "ag-grid-community": "^35.2.1",
         "ag-grid-vue3": "^35.2.1",
         "class-variance-authority": "^0.7.1",

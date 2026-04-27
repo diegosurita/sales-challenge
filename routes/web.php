@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Module\Auth\Interface\Controllers\AuthenticationController;
 use Module\Client\Interface\Controllers\ClientController;
+use Module\Shared\Interface\Controllers\DashboardController;
 use Module\Product\Interface\Controllers\ProductController;
 use Module\Sale\Interface\Controllers\SaleController;
 use Module\Service\Interface\Controllers\ServiceController;
@@ -16,7 +17,7 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::middleware('auth')->group(function () {
-    Route::inertia('/dashboard', 'Auth/Dashboard')->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/clients', ClientController::class)->except(['show']);
     Route::resource('/products', ProductController::class)->except(['show']);
     Route::resource('/sales', SaleController::class)->except(['edit', 'update', 'destroy']);

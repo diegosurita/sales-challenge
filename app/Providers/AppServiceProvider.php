@@ -17,10 +17,12 @@ use Module\Product\Infrastructure\Gateways\ProductQueryGateway;
 use Module\Product\Infrastructure\Persistence\Eloquent\Repositories\EloquentProductRepository;
 use Module\Product\Infrastructure\Persistence\Eloquent\Repositories\EloquentProductStockLedgerRepository;
 use Module\Sale\Core\Contracts\SaleRepositoryContract;
+use Module\Sale\Infrastructure\Gateways\DashboardQueryGateway;
 use Module\Sale\Infrastructure\Persistence\Eloquent\Repositories\EloquentSaleRepository;
 use Module\Service\Core\Contracts\ServiceRepositoryContract;
 use Module\Service\Infrastructure\Gateways\ServiceQueryGateway;
 use Module\Service\Infrastructure\Persistence\Eloquent\Repositories\EloquentServiceRepository;
+use Module\Shared\Core\Contracts\DashboardQueryServiceContract;
 use Module\Shared\Core\Contracts\ProductQueryServiceContract;
 use Module\Shared\Core\Contracts\ServiceQueryServiceContract;
 
@@ -69,6 +71,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             ServiceQueryServiceContract::class,
             ServiceQueryGateway::class,
+        );
+
+        $this->app->bind(
+            DashboardQueryServiceContract::class,
+            DashboardQueryGateway::class,
         );
     }
 
