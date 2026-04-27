@@ -171,3 +171,33 @@ it('should allow a product sold to 3 clients when client is one of them', functi
 
     $response->assertRedirect(route('sales.index'));
 });
+
+it('should reject a service whose required product is out of stock', function () {
+    $user = User::factory()->create();
+    $client = Client::factory()->create();
+    $product = Product::factory()->create(['stock_count' => 0, 'name' => 'Required Product']);
+    $service = Service::factory()->create(['available' => true, 'product_id' => $product->id, 'name' => 'Dependent Service']);
+
+    $response = actingAs($user)->post(route('sales.store'), [
+        'client_id' => $client->id,
+        'products' => [],
+        'services' => [['service_id' => $service->id]],
+    ]);
+
+    $response->assertSessionHasErrors('services');
+});
+
+it('should allow a service whose required product has positive stock', function () {
+    $user = User::factory()->create();
+    $client = Client::factory()->create();
+    $product = Product::factory()->create(['stock_count' => 5, 'name' => 'Required Product']);
+    $service = Service::factory()->create(['available' => true, 'product_id' => $product->id, 'price' => 30.00]);
+
+    $response = actingAs($user)->post(route('sales.store'), [
+        'client_id' => $client->id,
+        'products' => [],
+        'services' => [['service_id' => $service->id]],
+    ]);
+
+    $response->assertRedirect(route('sales.index'));
+});

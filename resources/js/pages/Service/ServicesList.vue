@@ -54,7 +54,7 @@ const columnDefs: ColDef<Service>[] = [
     },
     {
         field: 'product',
-        headerName: 'Dependent On',
+        headerName: 'Dependent On Product',
         sortable: true,
         filter: true,
         flex: 1,

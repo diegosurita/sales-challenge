@@ -11,6 +11,7 @@ use Module\Sale\Core\DTOs\SaleFormServiceItemDTO;
 use Module\Sale\Core\Exceptions\InsufficientStockException;
 use Module\Sale\Core\Exceptions\ProductClientLimitExceededException;
 use Module\Sale\Core\Exceptions\ServiceNotAvailableException;
+use Module\Sale\Core\Exceptions\ServiceRequiredProductOutOfStockException;
 use Module\Shared\Core\Contracts\ProductQueryServiceContract;
 use Module\Shared\Core\Contracts\ServiceQueryServiceContract;
 
@@ -26,6 +27,7 @@ class CreateSaleUseCase
      * @throws InsufficientStockException
      * @throws ProductClientLimitExceededException
      * @throws ServiceNotAvailableException
+     * @throws ServiceRequiredProductOutOfStockException
      */
     public function execute(SaleFormDTO $dto): void
     {
@@ -90,6 +92,7 @@ class CreateSaleUseCase
      * @return SaleCreateServiceItemDTO[]
      *
      * @throws ServiceNotAvailableException
+     * @throws ServiceRequiredProductOutOfStockException
      */
     private function resolveServices(array $services): array
     {
@@ -99,6 +102,19 @@ class CreateSaleUseCase
 
         $ids = array_map(fn (SaleFormServiceItemDTO $s) => $s->serviceId, $services);
         $infos = $this->serviceQueryService->getServicesInfo($ids);
+
+        $depProductIds = array_values(
+            array_filter(
+                array_unique(
+                    array_map(fn (array $info) => $info['product']['id'] ?? null, $infos),
+                ),
+                fn (mixed $id) => $id !== null
+            )
+        );
+
+        $depProductInfos = $depProductIds !== []
+            ? $this->productQueryService->getProductsInfo($depProductIds)
+            : [];
 
         $items = [];
 
@@ -111,6 +127,18 @@ class CreateSaleUseCase
 
             if (!$info['available']) {
                 throw new ServiceNotAvailableException($info['name']);
+            }
+
+            if (isset($info['product'])) {
+                $depProduct = $depProductInfos[$info['product']['id']] ?? null;
+                $stockCount = $depProduct['stock_count'] ?? 0;
+
+                if ($stockCount < 1) {
+                    throw new ServiceRequiredProductOutOfStockException(
+                        serviceName: $info['name'],
+                        productName: $info['product']['name'],
+                    );
+                }
             }
 
             $items[] = new SaleCreateServiceItemDTO(
