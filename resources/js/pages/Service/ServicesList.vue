@@ -135,6 +135,9 @@ const confirmDelete = async () => {
 
 const gridOptions: GridOptions = {
     domLayout: 'autoHeight',
+    pagination: true,
+    paginationPageSize: 10,
+    paginationPageSizeSelector: [10, 20, 50],
     context: {
         onDelete: (id: number) => {
             serviceToDelete.value = id;

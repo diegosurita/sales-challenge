@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { Head, router, usePage } from '@inertiajs/vue3';
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import type { ColDef, GridOptions } from 'ag-grid-community';
+import { AgGridVue } from 'ag-grid-vue3';
 import { computed, reactive, ref } from 'vue';
 import RegisterStockModal from '@/components/Product/RegisterStockModal.vue';
 import InternalBaseLayout from '@/components/Shared/InternalBaseLayout.vue';
@@ -16,6 +19,8 @@ interface Props {
     product?: { id: number; name: string; price: number; stock_count: number | null };
     stockLedgerEntries?: StockLedgerEntry[];
 }
+
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 const props = defineProps<Props>();
 
@@ -51,6 +56,46 @@ const resetFieldError = (field: string) => {
 
 const formatDate = (isoDate: string): string => {
     return new Date(isoDate).toLocaleString();
+};
+
+const stockLedgerColumnDefs: ColDef<StockLedgerEntry>[] = [
+    {
+        field: 'created_at',
+        headerName: 'Date',
+        sortable: true,
+        filter: true,
+        flex: 1,
+        valueFormatter: ({ value }: { value: string }) => formatDate(value),
+    },
+    {
+        field: 'reason',
+        headerName: 'Reason',
+        sortable: true,
+        filter: true,
+        flex: 2,
+    },
+    {
+        field: 'quantity',
+        headerName: 'Quantity',
+        sortable: true,
+        filter: true,
+        width: 130,
+        valueFormatter: ({ value }: { value: number }) =>
+            `${value >= 0 ? '+' : ''}${value}`,
+        cellStyle: ({ value }: { value: number }) => ({
+            color: value >= 0 ? '#059669' : '#dc2626',
+            fontWeight: '500',
+            textAlign: 'right' as const,
+        }),
+        headerClass: 'ag-right-aligned-header',
+    },
+];
+
+const stockLedgerGridOptions: GridOptions<StockLedgerEntry> = {
+    domLayout: 'autoHeight',
+    pagination: true,
+    paginationPageSize: 10,
+    paginationPageSizeSelector: [10, 20, 50],
 };
 </script>
 
@@ -187,31 +232,12 @@ const formatDate = (isoDate: string): string => {
                     </button>
                 </div>
 
-                <div v-if="stockLedgerEntries && stockLedgerEntries.length > 0" class="overflow-hidden rounded-lg border border-slate-200">
-                    <table class="w-full text-sm">
-                        <thead class="bg-slate-50">
-                            <tr>
-                                <th class="px-4 py-3 text-left font-medium text-slate-600">Date</th>
-                                <th class="px-4 py-3 text-left font-medium text-slate-600">Reason</th>
-                                <th class="px-4 py-3 text-right font-medium text-slate-600">Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            <tr v-for="entry in stockLedgerEntries" :key="entry.id" class="bg-white">
-                                <td class="px-4 py-3 text-slate-600">{{ formatDate(entry.created_at) }}</td>
-                                <td class="px-4 py-3 text-slate-800">{{ entry.reason }}</td>
-                                <td
-                                    class="px-4 py-3 text-right font-medium"
-                                    :class="entry.quantity >= 0 ? 'text-emerald-600' : 'text-red-600'"
-                                >
-                                    {{ entry.quantity >= 0 ? '+' : '' }}{{ entry.quantity }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <p v-else class="text-sm text-slate-500">No stock entries yet.</p>
+                <AgGridVue
+                    :columnDefs="stockLedgerColumnDefs"
+                    :rowData="stockLedgerEntries ?? []"
+                    :gridOptions="stockLedgerGridOptions"
+                    class="ag-theme-alpine"
+                />
             </div>
 
             <RegisterStockModal
