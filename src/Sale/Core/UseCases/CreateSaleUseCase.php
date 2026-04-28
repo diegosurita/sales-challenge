@@ -113,7 +113,7 @@ class CreateSaleUseCase
             return [];
         }
 
-        $ids = array_map(fn (SaleFormServiceItemDTO $s) => $s->serviceId, $services);
+        $ids = array_map(fn (SaleFormServiceItemDTO $serviceItem) => $serviceItem->serviceId, $services);
         $infos = $this->serviceQueryService->getServicesInfo($ids);
 
         $depProductIds = array_values(

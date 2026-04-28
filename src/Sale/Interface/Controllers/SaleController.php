@@ -42,18 +42,18 @@ class SaleController extends Controller
     ): Response {
         $products = array_filter(
             $productsUseCase->execute(),
-            fn ($p) => $p->getStockCount() > 0,
+            fn ($product) => $product->getStockCount() > 0,
         );
 
         $services = array_filter(
             $servicesUseCase->execute(),
-            fn ($s) => $s->getAvailable(),
+            fn ($service) => $service->getAvailable(),
         );
 
         return Inertia::render('Sale/SaleForm', [
-            'clients' => array_map(fn ($c) => $c->toArray(), $clientsUseCase->execute()),
-            'products' => array_map(fn ($p) => $p->toArray(), array_values($products)),
-            'services' => array_map(fn ($s) => $s->toArray(), array_values($services)),
+            'clients' => array_map(fn ($client) => $client->toArray(), $clientsUseCase->execute()),
+            'products' => array_map(fn ($product) => $product->toArray(), array_values($products)),
+            'services' => array_map(fn ($service) => $service->toArray(), array_values($services)),
         ]);
     }
 
