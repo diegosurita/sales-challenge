@@ -6,6 +6,7 @@ services:
             args:
                 WWWGROUP: '${WWWGROUP}'
         image: 'sail-8.5/app'
+        entrypoint: sh /var/www/html/docker/entrypoint.sh
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
@@ -22,7 +23,8 @@ services:
         networks:
             - sail
         depends_on:
-            - pgsql
+            pgsql:
+                condition: service_healthy
     pgsql:
         image: 'postgres:18-alpine'
         ports:

@@ -39,3 +39,7 @@ Follow the instructions below to set up the project environment and run the appl
 ## How to Access
 
 Once the containers are up and running, open your web browser and navigate to `http://localhost`.
+
+Access the application using the following credentials:
+- **Email**: `test@example.com`
+- **Password**: `password`
