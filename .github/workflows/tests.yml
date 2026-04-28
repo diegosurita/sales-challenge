@@ -20,6 +20,7 @@ jobs:
       DB_DATABASE: laravel
       DB_USERNAME: laravel
       DB_PASSWORD: secret
+      LARAVEL_BYPASS_ENV_CHECK: 1
     services:
       postgres:
         image: postgres:18-alpine
