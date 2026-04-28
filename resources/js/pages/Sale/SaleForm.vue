@@ -38,7 +38,7 @@ const props = defineProps<{
 
 const form = useForm({
     client_id: null as number | null,
-    products: [] as { product_id: number }[],
+    products: [] as { product_id: number; quantity: number }[],
     services: [] as { service_id: number }[],
 });
 
@@ -103,8 +103,24 @@ const filteredAvailableServices = computed(() =>
 
 const addedProducts = computed(() =>
     form.products
-        .map((fp) => props.products.find((p) => p.id === fp.product_id))
-        .filter((product): product is Product => product !== undefined),
+        .map((formProduct) => {
+            const product = props.products.find(
+                (item) => item.id === formProduct.product_id,
+            );
+
+            if (product === undefined) {
+                return null;
+            }
+
+            return {
+                ...product,
+                quantity: formProduct.quantity,
+            };
+        })
+        .filter(
+            (product): product is Product & { quantity: number } =>
+                product !== null,
+        ),
 );
 
 const addedServices = computed(() =>
@@ -122,7 +138,7 @@ const addProduct = () => {
         return;
     }
 
-    form.products.push({ product_id: selectedProduct.value.id });
+    form.products.push({ product_id: selectedProduct.value.id, quantity: 1 });
     selectedProduct.value = null;
     productQuery.value = '';
 };
@@ -131,6 +147,26 @@ const removeProduct = (productId: number) => {
     form.products = form.products.filter(
         (product) => product.product_id !== productId,
     );
+};
+
+const updateProductQuantity = (
+    productId: number,
+    quantityInputValue: string,
+) => {
+    const parsedQuantity = Number.parseInt(quantityInputValue, 10);
+    const sanitizedQuantity =
+        Number.isNaN(parsedQuantity) || parsedQuantity < 1 ? 1 : parsedQuantity;
+
+    form.products = form.products.map((product) => {
+        if (product.product_id !== productId) {
+            return product;
+        }
+
+        return {
+            ...product,
+            quantity: sanitizedQuantity,
+        };
+    });
 };
 
 const addService = () => {
@@ -160,7 +196,7 @@ const addService = () => {
             return;
         }
 
-        form.products.push({ product_id: requiredProduct.id });
+        form.products.push({ product_id: requiredProduct.id, quantity: 1 });
     }
 
     form.services.push({ service_id: selectedService.value.id });
@@ -175,7 +211,10 @@ const removeService = (serviceId: number) => {
 };
 
 const productSubtotal = computed(() =>
-    addedProducts.value.reduce((sum, product) => sum + product.price, 0),
+    addedProducts.value.reduce(
+        (sum, product) => sum + product.price * product.quantity,
+        0,
+    ),
 );
 
 const serviceSubtotal = computed(() =>
@@ -369,6 +408,16 @@ const submit = () => {
                                     Price
                                 </th>
                                 <th
+                                    class="px-4 py-2 text-right font-medium text-slate-600"
+                                >
+                                    Qty
+                                </th>
+                                <th
+                                    class="px-4 py-2 text-right font-medium text-slate-600"
+                                >
+                                    Subtotal
+                                </th>
+                                <th
                                     class="px-4 py-2 text-center font-medium text-slate-600"
                                 >
                                     Remove
@@ -385,6 +434,30 @@ const submit = () => {
                                 </td>
                                 <td class="px-4 py-2 text-right text-slate-700">
                                     {{ formatCurrency(product.price) }}
+                                </td>
+                                <td class="px-4 py-2 text-right text-slate-700">
+                                    <input
+                                        :value="product.quantity"
+                                        type="number"
+                                        min="1"
+                                        step="1"
+                                        class="w-20 rounded-md border border-slate-300 bg-white px-2 py-1 text-right text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                                        @input="
+                                            updateProductQuantity(
+                                                product.id,
+                                                (
+                                                    $event.target as HTMLInputElement
+                                                ).value,
+                                            )
+                                        "
+                                    />
+                                </td>
+                                <td class="px-4 py-2 text-right text-slate-700">
+                                    {{
+                                        formatCurrency(
+                                            product.price * product.quantity,
+                                        )
+                                    }}
                                 </td>
                                 <td class="px-4 py-2 text-center">
                                     <button

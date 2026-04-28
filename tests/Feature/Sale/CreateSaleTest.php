@@ -31,7 +31,7 @@ it('should create a sale with a product and redirect to index', function () {
 
     $response = actingAs($user)->post(route('sales.store'), [
         'client_id' => $client->id,
-        'products' => [['product_id' => $product->id]],
+        'products' => [['product_id' => $product->id, 'quantity' => 1]],
         'services' => [],
     ]);
 
@@ -74,7 +74,7 @@ it('should require a client to create a sale', function () {
     $product = Product::factory()->create(['stock_count' => 5]);
 
     $response = actingAs($user)->post(route('sales.store'), [
-        'products' => [['product_id' => $product->id]],
+        'products' => [['product_id' => $product->id, 'quantity' => 1]],
         'services' => [],
     ]);
 
@@ -101,7 +101,7 @@ it('should reject a product with insufficient stock', function () {
 
     $response = actingAs($user)->post(route('sales.store'), [
         'client_id' => $client->id,
-        'products' => [['product_id' => $product->id]],
+        'products' => [['product_id' => $product->id, 'quantity' => 1]],
         'services' => [],
     ]);
 
@@ -139,7 +139,7 @@ it('should reject a product already sold to 3 different clients on the same day'
 
     $response = actingAs($user)->post(route('sales.store'), [
         'client_id' => $newClient->id,
-        'products' => [['product_id' => $product->id]],
+        'products' => [['product_id' => $product->id, 'quantity' => 1]],
         'services' => [],
     ]);
 
@@ -165,7 +165,7 @@ it('should allow a product sold to 3 clients when client is one of them', functi
     // The repeating client should still be able to buy (already in the set of 3)
     $response = actingAs($user)->post(route('sales.store'), [
         'client_id' => $repeatingClient->id,
-        'products' => [['product_id' => $product->id]],
+        'products' => [['product_id' => $product->id, 'quantity' => 1]],
         'services' => [],
     ]);
 
@@ -195,7 +195,7 @@ it('should reject a service whose required product is out of stock', function ()
 
     $response = actingAs($user)->post(route('sales.store'), [
         'client_id' => $client->id,
-        'products' => [['product_id' => $product->id]],
+        'products' => [['product_id' => $product->id, 'quantity' => 1]],
         'services' => [['service_id' => $service->id]],
     ]);
 
@@ -210,9 +210,72 @@ it('should allow a service whose required product has positive stock', function 
 
     $response = actingAs($user)->post(route('sales.store'), [
         'client_id' => $client->id,
-        'products' => [['product_id' => $product->id]],
+        'products' => [['product_id' => $product->id, 'quantity' => 1]],
         'services' => [['service_id' => $service->id]],
     ]);
 
     $response->assertRedirect(route('sales.index'));
+});
+
+it('should create a sale with a product quantity greater than one', function () {
+    $user = User::factory()->create();
+    $client = Client::factory()->create();
+    $product = Product::factory()->create(['stock_count' => 10, 'price' => 100.00]);
+
+    $response = actingAs($user)->post(route('sales.store'), [
+        'client_id' => $client->id,
+        'products' => [['product_id' => $product->id, 'quantity' => 3]],
+        'services' => [],
+    ]);
+
+    $response->assertRedirect(route('sales.index'));
+
+    $sale = Sale::where('client_id', $client->id)->latest('id')->first();
+
+    expect($sale)->not->toBeNull();
+
+    $saleProduct = SaleProduct::where('sale_id', $sale->id)
+        ->where('product_id', $product->id)
+        ->first();
+
+    expect($saleProduct)->not->toBeNull();
+    expect($saleProduct->quantity)->toBe(3);
+
+    $product->refresh();
+    expect($product->stock_count)->toBe(7);
+
+    $ledgerEntry = ProductStockLedger::where('product_id', $product->id)
+        ->where('quantity', -3)
+        ->where('reason', 'sale')
+        ->first();
+
+    expect($ledgerEntry)->not->toBeNull();
+});
+
+it('should reject a product quantity greater than available stock', function () {
+    $user = User::factory()->create();
+    $client = Client::factory()->create();
+    $product = Product::factory()->create(['stock_count' => 2, 'name' => 'Low Stock Item']);
+
+    $response = actingAs($user)->post(route('sales.store'), [
+        'client_id' => $client->id,
+        'products' => [['product_id' => $product->id, 'quantity' => 3]],
+        'services' => [],
+    ]);
+
+    $response->assertSessionHasErrors('products');
+});
+
+it('should reject a product quantity lower than one', function () {
+    $user = User::factory()->create();
+    $client = Client::factory()->create();
+    $product = Product::factory()->create(['stock_count' => 5]);
+
+    $response = actingAs($user)->post(route('sales.store'), [
+        'client_id' => $client->id,
+        'products' => [['product_id' => $product->id, 'quantity' => 0]],
+        'services' => [],
+    ]);
+
+    $response->assertSessionHasErrors('products.0.quantity');
 });

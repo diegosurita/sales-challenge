@@ -63,6 +63,7 @@ class SaleController extends Controller
             'client_id' => 'required|integer',
             'products' => 'nullable|array',
             'products.*.product_id' => 'required_with:products|integer',
+            'products.*.quantity' => 'required_with:products|integer|min:1',
             'services' => 'nullable|array',
             'services.*.service_id' => 'required_with:services|integer',
         ]);
@@ -79,7 +80,10 @@ class SaleController extends Controller
         $dto = new SaleFormDTO(
             clientId: (int) $request->input('client_id'),
             products: array_map(
-                fn (array $item) => new SaleFormProductItemDTO(productId: (int) $item['product_id']),
+                fn (array $item) => new SaleFormProductItemDTO(
+                    productId: (int) $item['product_id'],
+                    quantity: (int) $item['quantity'],
+                ),
                 $products,
             ),
             services: array_map(

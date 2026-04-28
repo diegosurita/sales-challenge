@@ -87,22 +87,23 @@ class EloquentSaleRepository implements SaleRepositoryContract
                     'sale_id' => $sale->id,
                     'product_id' => $product->productId,
                     'price' => $product->price,
-                    'quantity' => 1,
+                    'quantity' => $product->quantity,
                     'created_at' => $now,
                     'updated_at' => $now,
                 ], $products));
 
                 ProductStockLedger::insert(array_map(fn (SaleCreateProductItemDTO $product) => [
                     'product_id' => $product->productId,
-                    'quantity' => -1,
+                    'quantity' => -$product->quantity,
                     'reason' => 'sale',
                     'created_at' => $now,
                     'updated_at' => $now,
                 ], $products));
 
-                $productIds = array_map(fn (SaleCreateProductItemDTO $p) => $p->productId, $products);
-
-                Product::whereIn('id', $productIds)->decrement('stock_count');
+                foreach ($products as $product) {
+                    Product::where('id', $product->productId)
+                        ->decrement(column: 'stock_count', amount: $product->quantity);
+                }
             }
 
             if ($services !== []) {

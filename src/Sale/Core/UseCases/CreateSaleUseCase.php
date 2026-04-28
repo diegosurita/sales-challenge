@@ -56,13 +56,20 @@ class CreateSaleUseCase
             return [];
         }
 
-        $ids = array_map(fn (SaleFormProductItemDTO $p) => $p->productId, $products);
+        $requestedQuantitiesByProductId = [];
+
+        foreach ($products as $product) {
+            $requestedQuantitiesByProductId[$product->productId] =
+                ($requestedQuantitiesByProductId[$product->productId] ?? 0) + $product->quantity;
+        }
+
+        $ids = array_keys($requestedQuantitiesByProductId);
         $infos = $this->productQueryService->getProductsInfo($ids);
 
         $items = [];
 
-        foreach ($products as $product) {
-            $info = $infos[$product->productId] ?? null;
+        foreach ($requestedQuantitiesByProductId as $productId => $requestedQuantity) {
+            $info = $infos[$productId] ?? null;
 
             if ($info === null) {
                 continue;
@@ -70,19 +77,20 @@ class CreateSaleUseCase
 
             $stockCount = $info['stock_count'] ?? 0;
 
-            if ($stockCount < 1) {
+            if ($stockCount < $requestedQuantity) {
                 throw new InsufficientStockException($info['name']);
             }
 
-            $clientIds = $this->saleRepository->getDistinctClientIdsForProductToday($product->productId);
+            $clientIds = $this->saleRepository->getDistinctClientIdsForProductToday($productId);
 
-            if (count($clientIds) >= 3 && !in_array($clientId, $clientIds, strict: true)) {
+            if (count($clientIds) >= 3 && ! in_array($clientId, $clientIds, strict: true)) {
                 throw new ProductClientLimitExceededException($info['name']);
             }
 
             $items[] = new SaleCreateProductItemDTO(
-                productId: $product->productId,
+                productId: $productId,
                 price: (float) $info['price'],
+                quantity: $requestedQuantity,
             );
         }
 
@@ -130,14 +138,14 @@ class CreateSaleUseCase
                 continue;
             }
 
-            if (!$info['available']) {
+            if (! $info['available']) {
                 throw new ServiceNotAvailableException($info['name']);
             }
 
             if (isset($info['product'])) {
                 $requiredProductId = $info['product']['id'];
 
-                if (!in_array($requiredProductId, $saleProductIds, strict: true)) {
+                if (! in_array($requiredProductId, $saleProductIds, strict: true)) {
                     throw new ServiceRequiredProductMissingFromSaleException(
                         serviceName: $info['name'],
                         productName: $info['product']['name'],
