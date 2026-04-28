@@ -10,6 +10,7 @@ use Illuminate\Validation\Rules\Password;
 use Module\Auth\Core\Contracts\UserAuthenticationServiceContract;
 use Module\Auth\Infrastructure\Security\LaravelUserAuthenticationService;
 use Module\Client\Core\Contracts\ClientRepositoryContract;
+use Module\Client\Infrastructure\Gateways\ClientModuleGateway;
 use Module\Client\Infrastructure\Persistence\Eloquent\Repositories\EloquentClientRepository;
 use Module\Product\Core\Contracts\ProductRepositoryContract;
 use Module\Product\Core\Contracts\ProductStockLedgerRepositoryContract;
@@ -24,6 +25,7 @@ use Module\Service\Core\Contracts\ServiceRepositoryContract;
 use Module\Service\Infrastructure\Gateways\ServiceModuleGateway;
 use Module\Service\Infrastructure\Gateways\ServiceQueryGateway;
 use Module\Service\Infrastructure\Persistence\Eloquent\Repositories\EloquentServiceRepository;
+use Module\Shared\Core\Contracts\ClientModuleGatewayContract;
 use Module\Shared\Core\Contracts\ProductModuleGatewayContract;
 use Module\Shared\Core\Contracts\ProductQueryServiceContract;
 use Module\Shared\Core\Contracts\SaleModuleGatewayContract;
@@ -80,6 +82,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             SaleModuleGatewayContract::class,
             SaleModuleGateway::class,
+        );
+
+        $this->app->bind(
+            ClientModuleGatewayContract::class,
+            ClientModuleGateway::class,
         );
 
         $this->app->bind(

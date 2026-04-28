@@ -16,6 +16,7 @@ class DashboardController extends Controller
         return Inertia::render('Shared/Dashboard', [
             'currentMonthRevenue' => $data->currentMonthRevenue,
             'monthlyRevenue' => $data->monthlyRevenue,
+            'topClients' => $data->topClients,
             'topProducts' => $data->topProducts,
             'topServices' => $data->topServices,
         ]);

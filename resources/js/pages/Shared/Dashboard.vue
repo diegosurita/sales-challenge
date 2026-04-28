@@ -11,6 +11,7 @@ import PieChart from '@/components/Shared/PieChart.vue';
 const props = defineProps<{
     currentMonthRevenue: number;
     monthlyRevenue: Array<{ month: string; revenue: number }>;
+    topClients: Array<{ name: string; total_sales_value: number }>;
     topProducts: Array<{ name: string; total_sold: number }>;
     topServices: Array<{ name: string; total_sold: number }>;
 }>();
@@ -192,6 +193,51 @@ const revenueChartOptions = computed(
                         No sales data yet.
                     </p>
                 </div>
+            </div>
+
+            <!-- Top Clients -->
+            <div class="rounded-lg border border-slate-200 bg-white p-4">
+                <h2 class="mb-3 text-base font-semibold text-slate-800">
+                    Top 5 Clients by Sales Value
+                </h2>
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr
+                            class="border-b border-slate-200 text-left text-slate-500"
+                        >
+                            <th class="pb-2 font-medium">#</th>
+                            <th class="pb-2 font-medium">Client</th>
+                            <th class="pb-2 text-right font-medium">
+                                Total Sales Value
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="(client, index) in topClients"
+                            :key="client.name"
+                            class="border-b border-slate-100 last:border-0"
+                        >
+                            <td class="py-2 text-slate-400">{{ index + 1 }}</td>
+                            <td class="py-2 font-medium text-slate-800">
+                                {{ client.name }}
+                            </td>
+                            <td class="py-2 text-right text-slate-600">
+                                {{
+                                    new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                    }).format(client.total_sales_value)
+                                }}
+                            </td>
+                        </tr>
+                        <tr v-if="topClients.length === 0">
+                            <td colspan="3" class="py-4 text-center text-slate-400">
+                                No sales data yet.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </InternalBaseLayout>
