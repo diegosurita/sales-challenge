@@ -9,11 +9,17 @@ use Module\Service\Core\Contracts\ServiceRepositoryContract;
 use Module\Service\Core\DTOs\ServiceFormDTO;
 use Module\Service\Core\Entities\ProductEntity;
 use Module\Service\Core\Entities\ServiceEntity;
+use Module\Service\Core\Exceptions\InvalidServiceProductException;
 use Module\Service\Infrastructure\Persistence\Eloquent\Models\Service;
+use Module\Shared\Core\Contracts\ProductQueryServiceContract;
 use Module\Shared\Core\Exceptions\NotFoundException;
 
 class EloquentServiceRepository implements ServiceRepositoryContract
 {
+    public function __construct(
+        private readonly ProductQueryServiceContract $productQueryService,
+    ) {}
+
     public function getAll(): array
     {
         return Service::with('product')->get()->map(fn (Service $service) => new ServiceEntity(
@@ -27,6 +33,8 @@ class EloquentServiceRepository implements ServiceRepositoryContract
 
     public function createService(ServiceFormDTO $dto): void
     {
+        $this->ensureProductExists(productId: $dto->productId);
+
         Service::create([
             'name' => $dto->name,
             'price' => $dto->price,
@@ -83,6 +91,8 @@ class EloquentServiceRepository implements ServiceRepositoryContract
             throw new NotFoundException('Service', $dto->id);
         }
 
+        $this->ensureProductExists(productId: $dto->productId);
+
         $service->update([
             'name' => $dto->name,
             'price' => $dto->price,
@@ -122,5 +132,18 @@ class EloquentServiceRepository implements ServiceRepositoryContract
                 'total_sold' => (int) $row->total_sold,
             ])
             ->toArray();
+    }
+
+    private function ensureProductExists(?int $productId): void
+    {
+        if ($productId === null) {
+            return;
+        }
+
+        $productInfo = $this->productQueryService->getProductInfo(productId: $productId);
+
+        if ($productInfo === null) {
+            throw new InvalidServiceProductException(productId: $productId);
+        }
     }
 }

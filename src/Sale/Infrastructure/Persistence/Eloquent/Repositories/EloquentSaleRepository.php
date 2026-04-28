@@ -122,10 +122,12 @@ class EloquentSaleRepository implements SaleRepositoryContract
      */
     public function getDistinctClientIdsForProductToday(int $productId): array
     {
+        $today = now();
+
         return SaleProduct::query()
             ->join('sales', 'sale_products.sale_id', '=', 'sales.id')
             ->where('sale_products.product_id', $productId)
-            ->whereDate('sales.created_at', now()->toDateString())
+            ->whereBetween('sales.created_at', [$today->copy()->startOfDay(), $today->copy()->endOfDay()])
             ->distinct()
             ->pluck('sales.client_id')
             ->map(fn ($id) => (int) $id)

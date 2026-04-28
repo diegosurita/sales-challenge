@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Module\Service\Core\DTOs\ServiceFormDTO;
+use Module\Service\Core\Exceptions\InvalidServiceProductException;
 use Module\Service\Core\UseCases\CreateServiceUseCase;
 use Module\Service\Core\UseCases\DeleteServiceUseCase;
 use Module\Service\Core\UseCases\GetServiceByIDUseCase;
@@ -63,7 +64,11 @@ class ServiceController extends Controller
             productId: $request->filled('product_id') ? (int) $request->product_id : null,
         );
 
-        $useCase->execute($dto);
+        try {
+            $useCase->execute($dto);
+        } catch (InvalidServiceProductException $e) {
+            return back()->withErrors(['product_id' => $e->getMessage()])->withInput();
+        }
 
         session()->flash('success', 'Service created successfully.');
 
@@ -87,7 +92,11 @@ class ServiceController extends Controller
             productId: $request->filled('product_id') ? (int) $request->product_id : null,
         );
 
-        $useCase->execute($dto);
+        try {
+            $useCase->execute($dto);
+        } catch (InvalidServiceProductException $e) {
+            return back()->withErrors(['product_id' => $e->getMessage()])->withInput();
+        }
 
         session()->flash('success', 'Service updated successfully.');
 
