@@ -1,5 +1,18 @@
 # Sales Challenge Project
 
+## Project Overview
+
+This project is a sales management application built to register clients, products, services, and sales operations in a modular architecture.
+
+## Tech Stack
+
+- PHP (Laravel)
+- Inertia.js
+- Vue.js + TypeScript
+- Vite
+- PostgreSQL
+- Docker Compose
+
 ## Setup Instructions
 
 Follow the instructions below to set up the project environment and run the application.
@@ -19,7 +32,10 @@ Follow the instructions below to set up the project environment and run the appl
    ```
 1. Since this project uses Docker Compose, you can start the application using the following command:
    ```bash
-   docker-compose up -d
+   docker-compose up
    ```
    This command will build and start the necessary containers for the application.
-1. Once the containers are up and running, you can access the application by opening your web browser and navigating to `http://localhost`.
+
+## How to Access
+
+Once the containers are up and running, open your web browser and navigate to `http://localhost`.
