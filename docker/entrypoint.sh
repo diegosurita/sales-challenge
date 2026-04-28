@@ -7,6 +7,10 @@ if [ ! -f .env ]; then
     cp .env.example .env
 fi
 
+# Setup PHP dependencies
+echo "Installing PHP dependencies..."
+composer install --no-interaction --prefer-dist --optimize-autoloader
+
 # Generate application key if not set
 if [ -z "$APP_KEY" ]; then
     echo "No APP_KEY found. Generating application key..."

@@ -36,6 +36,8 @@ Follow the instructions below to set up the project environment and run the appl
    ```
    This command will build and start the necessary containers for the application.
 
+   **Note:** The first time you run this command, it may take a few minutes to build the images and set up the containers.
+
 ## How to Access
 
 Once the containers are up and running, open your web browser and navigate to `http://localhost`.
