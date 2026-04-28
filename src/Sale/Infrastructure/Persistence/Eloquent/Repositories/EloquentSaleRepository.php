@@ -19,7 +19,7 @@ class EloquentSaleRepository implements SaleRepositoryContract
 {
     public function getAll(): array
     {
-        return Sale::get()->map(fn (Sale $sale) => new SaleEntity(
+        return Sale::orderBy('created_at', 'desc')->get()->map(fn (Sale $sale) => new SaleEntity(
             id: $sale->id,
             clientId: $sale->client_id,
             clientName: $sale->client->name,
